@@ -2,7 +2,10 @@ module github.com/72nd/nohelpline
 
 go 1.19
 
-require fyne.io/fyne/v2 v2.2.4
+require (
+	fyne.io/fyne/v2 v2.2.4
+	github.com/freddy33/graphml v1.0.0
+)
 
 require (
 	fyne.io/systray v1.10.1-0.20220621085403-9a2652634e93 // indirect
@@ -23,7 +26,6 @@ require (
 	github.com/srwiley/rasterx v0.0.0-20200120212402-85cb7272f5e9 // indirect
 	github.com/stretchr/testify v1.7.2 // indirect
 	github.com/tevino/abool v1.2.0 // indirect
-	github.com/yaricom/goGraphML v1.1.0 // indirect
 	github.com/yuin/goldmark v1.4.0 // indirect
 	golang.org/x/image v0.0.0-20220601225756-64ec528b34cd // indirect
 	golang.org/x/mobile v0.0.0-20211207041440-4e6c2922fdee // indirect
