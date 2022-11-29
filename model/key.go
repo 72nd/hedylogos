@@ -9,6 +9,7 @@ import (
 	"github.com/freddy33/graphml"
 )
 
+// The different key names as defined by the specification.
 type KeyName string
 
 const (
@@ -16,10 +17,11 @@ const (
 	DescriptionKey = KeyName("Description")
 	AuthorKey      = KeyName("Author")
 	VersionKey     = KeyName("Version")
+	TypeKey        = KeyName("Type")
 )
 
 func (n KeyName) Instances() []KeyName {
-	return []KeyName{LanguagesKey, DescriptionKey, AuthorKey, VersionKey}
+	return []KeyName{LanguagesKey, DescriptionKey, AuthorKey, VersionKey, TypeKey}
 }
 
 type KeyTarget string
@@ -151,7 +153,7 @@ func (k Key) parseDataAsXml(data graphml.Data) ([]DataType, error) {
 		}
 	}
 	if len(rsl) == 0 {
-		return nil, fmt.Errorf("xml data entry matched by %s doesn't contain any data")
+		return nil, fmt.Errorf("xml data entry matched by %s doesn't contain any data", k.debugName())
 	}
 	return rsl, nil
 }

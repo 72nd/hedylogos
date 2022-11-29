@@ -124,7 +124,7 @@ Each node has a specific type which defines it's behavior.
 
 ![Recommended shape for an start node](start_end.png)
 
-Entry point of an scenario. If there is one than one starting point in a file the application will choose randomly one of the available start nodes. The `output` and `execute` properties are ignored for this kind of node.
+Entry point for a scenario. If there is one than one starting point in a file the application will choose randomly one of the available start nodes. The `output` and `execute` properties are ignored for this kind of node.
 
 
 ### End
