@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:java="http://www.yworks.com/xml/yfiles-common/1.0/java" xmlns:sys="http://www.yworks.com/xml/yfiles-common/markup/primitives/2.0" xmlns:x="http://www.yworks.com/xml/yfiles-common/markup/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:y="http://www.yworks.com/xml/graphml" xmlns:yed="http://www.yworks.com/xml/yed/3" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
+  <!--Created by yEd 3.22-->
+  <key attr.name="Description" attr.type="string" for="graph" id="d0"/>
+  <key attr.name="Languages" for="graph" id="d1">
+    <default/>
+  </key>
+  <key attr.name="Author" attr.type="string" for="graph" id="d2">
+    <default xml:space="preserve"/>
+  </key>
+  <key attr.name="Version" attr.type="string" for="graph" id="d3">
+    <default xml:space="preserve"/>
+  </key>
+  <key attr.name="IntTest" attr.type="int" for="graph" id="d4">
+    <default xml:space="preserve">0</default>
+  </key>
+  <key for="port" id="d5" yfiles.type="portgraphics"/>
+  <key for="port" id="d6" yfiles.type="portgeometry"/>
+  <key for="port" id="d7" yfiles.type="portuserdata"/>
+  <key attr.name="Type" attr.type="string" for="node" id="d8">
+    <default xml:space="preserve"/>
+  </key>
+  <key attr.name="Content" for="node" id="d9">
+    <default/>
+  </key>
+  <key attr.name="Execute" for="node" id="d10">
+    <default/>
+  </key>
+  <key attr.name="url" attr.type="string" for="node" id="d11"/>
+  <key attr.name="description" attr.type="string" for="node" id="d12"/>
+  <key for="node" id="d13" yfiles.type="nodegraphics"/>
+  <key for="graphml" id="d14" yfiles.type="resources"/>
+  <key attr.name="Value" attr.type="int" for="edge" id="d15">
+    <default xml:space="preserve">0</default>
+  </key>
+  <key attr.name="url" attr.type="string" for="edge" id="d16"/>
+  <key attr.name="description" attr.type="string" for="edge" id="d17"/>
+  <key for="edge" id="d18" yfiles.type="edgegraphics"/>
+  <graph edgedefault="directed" id="G">
+    <data key="d0" xml:space="preserve"><![CDATA[A first test file for experimentation.]]></data>
+    <data key="d1" xml:space="preserve"><language id="en" name="English" value="1" xmlns=""/>
+<language id="de_ch" name="Swiss-German" value="2" xmlns=""/>
+</data>
+    <data key="d2" xml:space="preserve"><![CDATA[72nd]]></data>
+    <data key="d3" xml:space="preserve"><![CDATA[0.1]]></data>
+    <data key="d4" xml:space="preserve">23</data>
+    <node id="n0">
+      <data key="d8" xml:space="preserve"><![CDATA[Start]]></data>
+      <data key="d13">
+        <y:ShapeNode>
+          <y:Geometry height="30.0" width="30.0" x="681.3416679730595" y="310.8620735055929"/>
+          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="30.9765625" x="-0.48828125" xml:space="preserve" y="5.93359375">Start<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+          <y:Shape type="ellipse"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n1">
+      <data key="d8" xml:space="preserve"><![CDATA[Language]]></data>
+      <data key="d9" xml:space="preserve">
+        <audio xmlns="" src="audio/language-menu.mp3" xml:space="preserve">Für Englisch wählen Sie die 1, für Deutsch die 2, für Schweizerdeutsch die 3</audio>
+      </data>
+      <data key="d13">
+        <y:ShapeNode>
+          <y:Geometry height="42.23595088353517" width="45.09100608969345" x="673.7961649282129" y="443.26499066068664"/>
+          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="31.955078125" x="6.567963982346782" xml:space="preserve" y="12.051569191767612">Lang<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+          <y:Shape type="star5"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n2">
+      <data key="d8" xml:space="preserve"><![CDATA[content]]></data>
+      <data key="d9" xml:space="preserve">
+        <audio xmlns="" lang="*" src="audio/wellcome.mp3" xml:space="preserve">Willkommen bei der tollen Hotline.</audio>
+      </data>
+      <data key="d13">
+        <y:ShapeNode>
+          <y:Geometry height="30.0" width="69.15504282731263" x="661.7641465594032" y="377.06353208313976"/>
+          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="59.294921875" x="4.930060476156314" xml:space="preserve" y="5.93359375">Wellcome<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+          <y:Shape type="roundrectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n3">
+      <data key="d8" xml:space="preserve"><![CDATA[menu]]></data>
+      <data key="d9" xml:space="preserve"><audio xmlns="" lang="de" src="audio/main_de.mp3" target="1" xml:space="preserve">
+Haben Sie ein Problem mit dem Festnetz, wählen Sie die 1.
+Für Fragen betreffend der Rechnungsstellung drücken Sie die 2.
+</audio>
+<audio xmlns="" lang="de_ch" src="audio/main_de-ch.mp3" target="2" xml:space="preserve">
+Bi Problem mit ihrem Festnetztelefon wähled sie s eis.
+Frage zu ihrere Rächnig beantwortet mir unter em zwei.
+</audio></data>
+      <data key="d13">
+        <y:ShapeNode>
+          <y:Geometry height="30.0" width="74.04942318072676" x="659.3169563826963" y="515.5009415442219"/>
+          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="31.87890625" x="21.08525846536338" xml:space="preserve" y="5.93359375">Main<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+          <y:Shape type="hexagon"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n4">
+      <data key="d13">
+        <y:ShapeNode>
+          <y:Geometry height="30.0" width="85.06177897590851" x="572.328147748312" y="591.545441150619"/>
+          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="59.822265625" x="12.619756675454255" xml:space="preserve" y="5.93359375">Land Line<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+          <y:Shape type="roundrectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <node id="n5">
+      <data key="d13">
+        <y:ShapeNode>
+          <y:Geometry height="30.0" width="85.06177897590851" x="724.9832261243354" y="591.545441150619"/>
+          <y:Fill color="#FFCC00" transparent="false"/>
+          <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="21.30859375" x="31.876592612954255" xml:space="preserve" y="5.93359375">Bill<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+          <y:Shape type="roundrectangle"/>
+        </y:ShapeNode>
+      </data>
+    </node>
+    <edge id="e0" source="n0" target="n2">
+      <data key="d18">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e1" source="n2" target="n1">
+      <data key="d18">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e2" source="n1" target="n3">
+      <data key="d18">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e3" source="n3" target="n4">
+      <data key="d18">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e4" source="n3" target="n5">
+      <data key="d18">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="standard"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+  </graph>
+  <data key="d14">
+    <y:Resources/>
+  </data>
+</graphml>
