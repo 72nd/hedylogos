@@ -84,7 +84,7 @@ type Node interface {
 func NewNode(obj graphml.Node, keys Keys) (Node, error) {
 	nType, err := keys.DataByName(obj.ExtObject, string(TypeKey))
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("node %s: %s", obj.ID, err)
 	}
 	snType, ok := nType[0].(string)
 	if !ok {
