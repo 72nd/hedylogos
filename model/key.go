@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/72nd/nohelpline/enum"
 	"github.com/freddy33/graphml"
@@ -171,6 +172,10 @@ func (k Key) parseDataAsXml(data graphml.Data) ([]DataType, error) {
 		value, ok := ele.(xml.StartElement)
 		if ok {
 			rsl = append(rsl, value)
+		}
+		char, ok := ele.(xml.CharData)
+		if ok && !strings.HasPrefix(string(char), "\n") {
+			rsl = append(rsl, string(char))
 		}
 	}
 	if len(rsl) == 0 {

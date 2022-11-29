@@ -1,6 +1,7 @@
 package model
 
 import (
+	"encoding/xml"
 	"fmt"
 	"strings"
 
@@ -34,11 +35,40 @@ type Output interface {
 // Basic attributes which each node contains.
 type NodeBase struct {
 	ID   string
+	Name string
 	Type NodeType
 }
 
 func NewNodeBase(obj graphml.Node, keys Keys, ntype NodeType) (*NodeBase, error) {
-	return nil, nil
+	name, err := yedNodeName(obj, keys)
+	if err != nil {
+		return nil, err
+	}
+	return &NodeBase{
+		ID:   obj.ExtObject.ID,
+		Name: name,
+		Type: ntype,
+	}, nil
+}
+
+func yedNodeName(obj graphml.Node, keys Keys) (string, error) {
+	ng, err := keys.DataByName(obj.ExtObject, string(NodeGraphicsKey))
+	if err != nil {
+		return "", err
+	}
+	insideNodeLabel := false
+	for _, ele := range ng {
+		item, ok := ele.(xml.StartElement)
+		if ok && item.Name.Local == "NodeLabel" {
+			insideNodeLabel = true
+			continue
+		}
+		value, ok := ele.(string)
+		if ok && insideNodeLabel {
+			return value, nil
+		}
+	}
+	return "<UNDEFINED>", fmt.Errorf("node with id %s has no label", obj.ID)
 }
 
 // A node represents a stage in the control flow of the stroy. There are
@@ -60,7 +90,8 @@ func NewNode(obj graphml.Node, keys Keys) (Node, error) {
 	if !ok {
 		return nil, fmt.Errorf("type data in node has to be a string")
 	}
-	tnType, err := enum.EnumByValue[NodeType](StartNodeType, NodeType(strings.ToLower(snType)))
+	snType = strings.ToLower(snType)
+	tnType, err := enum.EnumByValue[NodeType](StartNodeType, NodeType(snType))
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +115,13 @@ type StartNode struct {
 // Parses a given a graphml node and returns it as a start node. The method
 // expects a node with the property `Type` set to `start`.
 func NewStartNode(obj graphml.Node, keys Keys, ntype NodeType) (*StartNode, error) {
-	return nil, nil
+	base, err := NewNodeBase(obj, keys, ntype)
+	if err != nil {
+		return nil, err
+	}
+	return &StartNode{
+		NodeBase: *base,
+	}, nil
 }
 
 func (s StartNode) ID() string {
@@ -103,8 +140,14 @@ type EndNode struct {
 
 // Parses a given a graphml node and returns it as a end node. The method
 // expects a node with the property `Type` set to `end`.
-func NewEndNode(obj graphml.Node, keys Keys, ntype NodeType) (*StartNode, error) {
-	return nil, nil
+func NewEndNode(obj graphml.Node, keys Keys, ntype NodeType) (*EndNode, error) {
+	base, err := NewNodeBase(obj, keys, ntype)
+	if err != nil {
+		return nil, err
+	}
+	return &EndNode{
+		NodeBase: *base,
+	}, nil
 }
 
 func (e EndNode) ID() string {
