@@ -13,15 +13,16 @@ import (
 type KeyName string
 
 const (
-	LanguagesKey   = KeyName("Languages")
-	DescriptionKey = KeyName("Description")
-	AuthorKey      = KeyName("Author")
-	VersionKey     = KeyName("Version")
-	TypeKey        = KeyName("Type")
+	LanguagesKey    = KeyName("Languages")
+	DescriptionKey  = KeyName("Description")
+	AuthorKey       = KeyName("Author")
+	VersionKey      = KeyName("Version")
+	TypeKey         = KeyName("Type")
+	NodeGraphicsKey = KeyName("yd.nodegraphics")
 )
 
 func (n KeyName) Instances() []KeyName {
-	return []KeyName{LanguagesKey, DescriptionKey, AuthorKey, VersionKey, TypeKey}
+	return []KeyName{LanguagesKey, DescriptionKey, AuthorKey, VersionKey, TypeKey, NodeGraphicsKey}
 }
 
 type KeyTarget string
@@ -70,10 +71,10 @@ type Key struct {
 }
 
 // Returns a new Key from a graphml Key.
-func NewKey(key graphml.Key) (*Key, error) {
+func NewKey(key graphml.Key) (*Key, bool, error) {
 	target, err := enum.EnumByValue[KeyTarget](GraphTarget, KeyTarget(key.For))
 	if err != nil {
-		return nil, err
+		return nil, true, nil
 	}
 	var t KeyType
 	switch key.Type {
@@ -84,14 +85,35 @@ func NewKey(key graphml.Key) (*Key, error) {
 	case "":
 		t = XmlType
 	default:
-		return nil, fmt.Errorf("type %s defined by key '%s' is not supported by this application", key.Type, key.Name)
+		return nil, false, fmt.Errorf("type %s defined by key '%s' is not supported by this application", key.Type, key.Name)
+	}
+	if err != nil {
+		return nil, false, err
+	}
+	name := keyName(key)
+	if name == "" {
+		return nil, true, nil
 	}
 	return &Key{
 		ID:     key.ID,
-		Name:   key.Name,
+		Name:   name,
 		Target: *target,
 		Type:   t,
-	}, nil
+	}, false, nil
+}
+
+// If the method returns an empty string t
+func keyName(key graphml.Key) string {
+	if key.Name != "" {
+		return key.Name
+	}
+	if len(key.Object.Unrecognized) == 0 {
+		return ""
+	}
+	if key.Object.Unrecognized[0].Name.Local == "yfiles.type" {
+		return fmt.Sprintf("yd.%s", key.Object.Unrecognized[0].Value)
+	}
+	return ""
 }
 
 // Looks for a data entry matching the given key.
@@ -114,6 +136,9 @@ func (k Key) matchAndGetValue(obj graphml.ExtObject) ([]DataType, error) {
 	if len(ele.Data) == 0 {
 		return nil, fmt.Errorf("data entry matched by name %s contains no data", k.debugName())
 	}
+	if k.Type == XmlType {
+		return k.parseDataAsXml(*ele)
+	}
 	charVal, ok := ele.Data[0].(xml.CharData)
 	if ok {
 		// Data is represented as `xml.CharData`.
@@ -123,8 +148,6 @@ func (k Key) matchAndGetValue(obj graphml.ExtObject) ([]DataType, error) {
 		case IntType:
 			v, err := strconv.Atoi(string(charVal))
 			return []DataType{v}, err
-		case XmlType:
-			return nil, fmt.Errorf("data entry matched by %s is expected to contain valid XML data but only char data was found", k.debugName())
 		default:
 			return nil, fmt.Errorf("key %s defines %s as type which isn't implemented by the Key class", k.debugName(), k.Type)
 		}
@@ -132,8 +155,6 @@ func (k Key) matchAndGetValue(obj graphml.ExtObject) ([]DataType, error) {
 	_, ok = ele.Data[0].(xml.StartElement)
 	if ok {
 		switch k.Type {
-		case XmlType:
-			return k.parseDataAsXml(*ele)
 		case StringType:
 			return nil, fmt.Errorf("string data entry matched by %s is expected to be represented by chars in the source but XML data was found instead", k.debugName())
 		case IntType:
@@ -171,14 +192,14 @@ type Keys map[string]Key
 func NewKeys[T DataType](keys []graphml.Key) (*Keys, error) {
 	var rsl = make(Keys)
 	for _, key := range keys {
-		if key.Name == "" {
+		r, ignore, err := NewKey(key)
+		if ignore {
 			continue
 		}
-		r, err := NewKey(key)
 		if err != nil {
 			return nil, err
 		}
-		rsl[key.Name] = *r
+		rsl[r.Name] = *r
 	}
 	return &rsl, nil
 }
