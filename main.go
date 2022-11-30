@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/72nd/hedylogos/graphml"
+	"github.com/72nd/hedylogos/model"
 )
 
 func main() {
@@ -31,21 +32,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(doc)
-
-	// fmt.Printf("%s\n", doc.Graphs[0].Nodes[0].Data[0].Data[0])
-
-	/*
-		graph := graphml.NewGraphML("Story")
-		file, err := os.Open(os.Args[1])
-		if err != nil {
-			log.Fatal(err)
-		}
-		if err := graph.Decode(file); err != nil {
-			log.Fatal(err)
-		}
-	*/
-
-	// gui.Run()
-
+	story, err := model.NewStory(*doc)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%+v\n", story)
 }

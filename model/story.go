@@ -4,6 +4,8 @@
 // result of an [github.com/hedylogos/graphml] import.l
 package model
 
+import "github.com/72nd/hedylogos/graphml"
+
 // Story contains a whole audio scenario containing the metadata and the
 // start nodes.
 type Story struct {
@@ -21,4 +23,10 @@ type Story struct {
 	// The collection of all nodes in the story. Should be only used
 	// internally.
 	Nodes Nodes
+}
+
+// Takes a [github.com/72nd/hedylogos/graphml.Document] validates the
+// data and returns a new [Story] instance based on it.
+func NewStory(doc graphml.Document) (*Story, error) {
+	return &Story{}, nil
 }
