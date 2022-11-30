@@ -4,7 +4,11 @@
 // result of an [github.com/hedylogos/graphml] import.l
 package model
 
-import "github.com/72nd/hedylogos/graphml"
+import (
+	"fmt"
+
+	"github.com/72nd/hedylogos/graphml"
+)
 
 // Story contains a whole audio scenario containing the metadata and the
 // start nodes.
@@ -28,5 +32,10 @@ type Story struct {
 // Takes a [github.com/72nd/hedylogos/graphml.Document] validates the
 // data and returns a new [Story] instance based on it.
 func NewStory(doc graphml.Document) (*Story, error) {
+	keys, err := NewKeys(doc.Keys)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Printf("%+v\n", keys)
 	return &Story{}, nil
 }
