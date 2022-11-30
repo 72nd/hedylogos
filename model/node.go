@@ -39,6 +39,13 @@ func (s NodeShape) Instances() []NodeShape {
 	return []NodeShape{EllipseShape, StarShape, RoundRectangleShape, HexagonShape}
 }
 
+// Implemented by all elements which can be child of node's output element.
+// Used to define the output of any given node. This can be something like
+// audio or text-to-speech (TTS) output.
+type Output interface {
+	Execute()
+}
+
 // Collection of [Node]s.
 type Nodes []Node
 
