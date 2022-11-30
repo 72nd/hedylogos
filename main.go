@@ -5,24 +5,34 @@ import (
 	"log"
 	"os"
 
-	"github.com/72nd/nohelpline/model"
-	"github.com/freddy33/graphml"
+	"github.com/72nd/nohelpline/graphml"
 )
 
 func main() {
-	file, err := os.Open(os.Args[1])
+	/*
+		// USING THE 3RD-PARTY LIBRARY
+		file, err := os.Open(os.Args[1])
+		if err != nil {
+			log.Fatal(err)
+		}
+		doc, err := graphml.Decode(file)
+		if err != nil {
+			log.Fatal(err)
+		}
+		story, err := model.NewStroy(*doc)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("%+v\n", story)
+	*/
+
+	// USING OWN GRAPHML LIBRARY
+	doc, err := graphml.FromFile(os.Args[1])
 	if err != nil {
 		log.Fatal(err)
 	}
-	doc, err := graphml.Decode(file)
-	if err != nil {
-		log.Fatal(err)
-	}
-	story, err := model.NewStroy(*doc)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("%+v\n", story)
+	fmt.Println(doc)
+
 	// fmt.Printf("%s\n", doc.Graphs[0].Nodes[0].Data[0].Data[0])
 
 	/*
