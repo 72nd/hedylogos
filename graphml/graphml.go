@@ -47,6 +47,12 @@ type Language struct {
 	Value   string   `xml:"value,attr"`
 }
 
+// Custom type. An output type using audio files.
+type Audio struct {
+	Source string `xml:"src,attr"`
+	Text   string `xml:",chardata"`
+}
+
 // yEd type. Contains information about the visual representation of
 // a given node. As some information (label text and shape) are used
 // within hedylogos the importer provides a partially implementation
