@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/72nd/hedylogos/enum"
@@ -50,10 +51,10 @@ type Output interface {
 type Nodes []Node
 
 // Takes a slice of `graphml.Node`s and returns a new [Nodes] instance.
-func NewNodes(nodes []graphml.Node, keys Keys) (*Nodes, error) {
+func NewNodes(nodes []graphml.Node, keys Keys, langs Languages) (*Nodes, error) {
 	var rsl Nodes
 	for _, node := range nodes {
-		nd, err := NewNode(node, keys)
+		nd, err := NewNode(node, keys, langs)
 		if err != nil {
 			return nil, err
 		}
@@ -73,11 +74,13 @@ type Node struct {
 	Type NodeType
 	// Shape used for the visual representation of the node within yEd.
 	Shape NodeShape
+	// Elements which will produce an output.
+	Output []Output
 }
 
 // Returns a new node based on the graphml version.
-func NewNode(node graphml.Node, keys Keys) (*Node, error) {
-	sto, err := NewStorage(node.Data, keys)
+func NewNode(node graphml.Node, keys Keys, langs Languages) (*Node, error) {
+	sto, err := NewStorage(node.Data, keys, &langs)
 	if err != nil {
 		return nil, err
 	}
@@ -98,6 +101,11 @@ func NewNode(node graphml.Node, keys Keys) (*Node, error) {
 	if err != nil {
 		return nil, err
 	}
+	audios, err := ValueByName[Audios](*sto, "Content")
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println(audios)
 	return &Node{
 		ID:    node.ID,
 		Name:  name,

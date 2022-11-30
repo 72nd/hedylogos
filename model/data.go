@@ -9,7 +9,7 @@ import (
 )
 
 type DataValueType interface {
-	string | int | Languages | graphml.ShapeData
+	string | int | Languages | graphml.ShapeData | Audios
 }
 
 func ValueByName[T DataValueType](sto Storage, name string) (*T, error) {
@@ -33,10 +33,10 @@ func ValueByName[T DataValueType](sto Storage, name string) (*T, error) {
 type Storage []Data
 
 // A new [Storage] from a slice of input data instances.
-func NewStorage(data []graphml.Data, keys Keys) (*Storage, error) {
+func NewStorage(data []graphml.Data, keys Keys, langs *Languages) (*Storage, error) {
 	var rsl Storage
 	for _, dt := range data {
-		d, err := NewData(dt, keys)
+		d, err := NewData(dt, keys, langs)
 		if err != nil {
 			return nil, err
 		}
@@ -74,7 +74,7 @@ type Data struct {
 }
 
 // Parses a given [github.com/72nd/hedylogos/graphml.Data] instance.
-func NewData(data graphml.Data, keys Keys) (*Data, error) {
+func NewData(data graphml.Data, keys Keys, langs *Languages) (*Data, error) {
 	key, err := keys.ByID(data.Key)
 	if err != nil {
 		return nil, err
@@ -87,6 +87,19 @@ func NewData(data graphml.Data, keys Keys) (*Data, error) {
 		return &Data{
 			Key:   *key,
 			Value: langs,
+		}, nil
+	}
+	if len(data.Audio) != 0 && key.Type == XmlSourceType {
+		if langs == nil {
+			return nil, fmt.Errorf("need languages to construct audio data fields")
+		}
+		audios, err := NewAudios(data.Audio, *langs)
+		if err != nil {
+			return nil, err
+		}
+		return &Data{
+			Key:   *key,
+			Value: audios,
 		}, nil
 	}
 	if data.ShapeData.Label != "" && key.Type == XmlSourceType {

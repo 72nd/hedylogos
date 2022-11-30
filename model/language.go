@@ -25,6 +25,16 @@ func NewLanguages(langs []graphml.Language) (*Languages, error) {
 	return &rsl, nil
 }
 
+// Returns whether a language with the given id exists.
+func (l Languages) Exists(id string) bool {
+	for _, lang := range l {
+		if lang.ID == id {
+			return true
+		}
+	}
+	return false
+}
+
 // Custom type. Defines the available languages in the scenario. Each
 // node with a language specific functions (like audio) has to
 // provide an implementation for all languages.

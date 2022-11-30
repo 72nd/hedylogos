@@ -110,6 +110,7 @@ type Data struct {
 	Key       string     `xml:"key,attr"`
 	XMLSpace  string     `xml:"xml:space,attr"`
 	Languages []Language `xml:"language"`
+	Audio     []Audio    `xml:"audio"`
 	ShapeData ShapeData  `xml:"ShapeNode"`
 	Body      string     `xml:",innerxml"`
 	CharData  string     `xml:",chardata"`

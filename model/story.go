@@ -36,7 +36,7 @@ func NewStory(doc graphml.Document) (*Story, error) {
 	if err != nil {
 		return nil, err
 	}
-	sto, err := NewStorage(doc.Graph.Data, *keys)
+	sto, err := NewStorage(doc.Graph.Data, *keys, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +56,7 @@ func NewStory(doc graphml.Document) (*Story, error) {
 	if err != nil {
 		return nil, err
 	}
-	nodes, err := NewNodes(doc.Graph.Nodes, *keys)
+	nodes, err := NewNodes(doc.Graph.Nodes, *keys, *langs)
 	if err != nil {
 		return nil, err
 	}
