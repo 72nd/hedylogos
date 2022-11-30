@@ -42,7 +42,9 @@ type Key struct {
 // provide an implementation for all languages.
 type Language struct {
 	XMLName xml.Name `xml:"language"`
+	ID      string   `xml:"id,attr"`
 	Name    string   `xml:"name,attr"`
+	Value   string   `xml:"value,attr"`
 }
 
 // yEd type. Contains information about the visual representation of
@@ -59,6 +61,10 @@ type ShapeData struct {
 // node. This information is used withing hedylogos to check if the
 // input files follows the specification in regard to the correct
 // usage of the available shapes in relation to the node type.
+//
+// The only reason this is represented as it's own separate struct
+// is that it's not possible to use the `,attr` notation of an xml
+// struct-tag in conjunction with an `>` expression.
 type Shape struct {
 	XMLName xml.Name `xml:"Shape"`
 	Type    string   `xml:"type,attr"`
