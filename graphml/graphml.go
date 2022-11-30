@@ -49,8 +49,10 @@ type Language struct {
 
 // Custom type. An output type using audio files.
 type Audio struct {
-	Source string `xml:"src,attr"`
-	Text   string `xml:",chardata"`
+	Source   string `xml:"src,attr"`
+	Language string `xml:"lang,attr"`
+	Target   string `xml:"target,attr"`
+	Text     string `xml:",chardata"`
 }
 
 // yEd type. Contains information about the visual representation of
