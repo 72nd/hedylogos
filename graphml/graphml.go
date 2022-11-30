@@ -29,12 +29,13 @@ import (
 // The domain of definition of this function is specified by the
 // 'for' attribute of the `<key>“.
 type Key struct {
-	XMLName xml.Name `xml:"key"`
-	ID      string   `xml:"id,attr"`
-	Name    string   `xml:"attr.name,attr"`
-	Type    string   `xml:"attr.type,attr"`
-	For     string   `xml:"for,attr"`
-	Default string   `xml:"default"`
+	XMLName   xml.Name `xml:"key"`
+	ID        string   `xml:"id,attr"`
+	Name      string   `xml:"attr.name,attr"`
+	Type      string   `xml:"attr.type,attr"`
+	For       string   `xml:"for,attr"`
+	YFileType string   `xml:"yfiles.type,attr"`
+	Default   string   `xml:"default"`
 }
 
 // Custom type. Defines the available languages in the scenario. Each

@@ -41,6 +41,22 @@ func (k Keys) ByName(name string) (*Key, error) {
 	return nil, fmt.Errorf("no key found with name '%s'", name)
 }
 
+// Returns all duplicate names of the keys.
+func (k Keys) Duplicates() []string {
+	var rsl []string
+	for i := range k {
+		for j := range k {
+			if i == j {
+				continue
+			}
+			if k[i].Name == k[j].Name {
+				rsl = append(rsl, k[i].Name)
+			}
+		}
+	}
+	return rsl
+}
+
 // Defines the targets for any key.
 type KeyTarget string
 
@@ -102,9 +118,13 @@ func NewKey(key graphml.Key) (*Key, error) {
 		tmp := XmlType
 		tp = &tmp
 	}
+	name := key.Name
+	if key.YFileType != "" {
+		name = fmt.Sprintf("yft.%s", key.YFileType)
+	}
 	return &Key{
 		ID:     key.ID,
-		Name:   key.Name,
+		Name:   name,
 		Target: *target,
 		Type:   *tp,
 	}, nil
