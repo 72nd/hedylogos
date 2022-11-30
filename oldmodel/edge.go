@@ -1,3 +1,3 @@
-package model
+package oldmodel
 
 type Edge struct{}
