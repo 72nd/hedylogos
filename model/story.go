@@ -56,11 +56,16 @@ func NewStory(doc graphml.Document) (*Story, error) {
 	if err != nil {
 		return nil, err
 	}
+	nodes, err := NewNodes(doc.Graph.Nodes, *keys)
+	if err != nil {
+		return nil, err
+	}
 	return &Story{
 		Version:     *version,
 		Author:      *author,
 		Description: *desc,
 		Keys:        *keys,
 		Languages:   *langs,
+		Nodes:       *nodes,
 	}, nil
 }

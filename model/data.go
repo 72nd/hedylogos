@@ -9,7 +9,7 @@ import (
 )
 
 type DataValueType interface {
-	string | int | Languages
+	string | int | Languages | graphml.ShapeData
 }
 
 func ValueByName[T DataValueType](sto Storage, name string) (*T, error) {
@@ -112,6 +112,5 @@ func NewData(data graphml.Data, keys Keys) (*Data, error) {
 			Value: strVal,
 		}, nil
 	}
-	fmt.Println(strings.TrimSpace(data.CharData))
 	return &Data{}, nil
 }
