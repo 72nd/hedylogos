@@ -23,22 +23,14 @@ func NewKeys(keys []graphml.Key) (*Keys, error) {
 	return &rsl, nil
 }
 
-// Returns a key with the given name. Returns an error if no key was
-// found or there are multiple keys with the same name.
-func (k Keys) ByName(name string) (*Key, error) {
-	var rsl *Key
+// Returns a key with the given id. Returns an error if no key was found.
+func (k Keys) ByID(id string) (*Key, error) {
 	for _, key := range k {
-		if key.Name == name {
-			if rsl != nil {
-				return nil, fmt.Errorf("there is more than one key with the name '%s'", name)
-			}
-			rsl = &key
+		if key.ID == id {
+			return &key, nil
 		}
 	}
-	if rsl != nil {
-		return rsl, nil
-	}
-	return nil, fmt.Errorf("no key found with name '%s'", name)
+	return nil, fmt.Errorf("no key was found for id '%s'", id)
 }
 
 // Returns all duplicate names of the keys.
@@ -76,13 +68,13 @@ func (t KeyTarget) Instances() []KeyTarget {
 type SourceKeyType string
 
 const (
-	StringType = SourceKeyType("string")
-	IntType    = SourceKeyType("int")
-	XmlType    = SourceKeyType("xml")
+	StringSourceType = SourceKeyType("string")
+	IntSourceType    = SourceKeyType("int")
+	XmlSourceType    = SourceKeyType("xml")
 )
 
 func (t SourceKeyType) Instances() []SourceKeyType {
-	return []SourceKeyType{StringType, IntType, XmlType}
+	return []SourceKeyType{StringSourceType, IntSourceType, XmlSourceType}
 }
 
 // A key is used to access a certain data attribute of a Graph, Node or Edge.
@@ -109,13 +101,13 @@ func NewKey(key graphml.Key) (*Key, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error while importing key '%s' (ID: %s), %s", key.Name, key.ID, err)
 	}
-	tp, err := enum.EnumByValue[SourceKeyType](StringType, SourceKeyType(key.Type))
+	tp, err := enum.EnumByValue[SourceKeyType](StringSourceType, SourceKeyType(key.Type))
 	if err != nil {
 		// If no type is given by the source file it's assumed to be [XmlType].
 		if key.Type != "" {
 			return nil, err
 		}
-		tmp := XmlType
+		tmp := XmlSourceType
 		tp = &tmp
 	}
 	name := key.Name

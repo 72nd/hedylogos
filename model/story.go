@@ -5,8 +5,6 @@
 package model
 
 import (
-	"fmt"
-
 	"github.com/72nd/hedylogos/graphml"
 )
 
@@ -27,6 +25,8 @@ type Story struct {
 	// The collection of all nodes in the story. Should be only used
 	// internally.
 	Nodes Nodes
+	// All keys of the story.
+	Keys Keys
 }
 
 // Takes a [github.com/72nd/hedylogos/graphml.Document] validates the
@@ -36,6 +36,16 @@ func NewStory(doc graphml.Document) (*Story, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("%+v\n", keys)
-	return &Story{}, nil
+	sto, err := NewStorage(doc.Graph.Data, *keys)
+	if err != nil {
+		return nil, err
+	}
+	version, err := ValueByName[string](*sto, "Version")
+	if err != nil {
+		return nil, err
+	}
+	return &Story{
+		Version: *version,
+		Keys:    *keys,
+	}, nil
 }

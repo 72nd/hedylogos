@@ -111,7 +111,8 @@ type Data struct {
 	XMLSpace  string     `xml:"xml:space,attr"`
 	Languages []Language `xml:"language"`
 	ShapeData ShapeData  `xml:"ShapeNode"`
-	Value     string     `xml:",innerxml"`
+	Body      string     `xml:",innerxml"`
+	CharData  string     `xml:",chardata"`
 }
 
 // GraphML type. A node within a graph.
