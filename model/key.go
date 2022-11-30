@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/72nd/nohelpline/enum"
+	"github.com/72nd/hedylogos/enum"
 	"github.com/freddy33/graphml"
 )
 

@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/72nd/nohelpline/graphml"
+	"github.com/72nd/hedylogos/graphml"
 )
 
 func main() {

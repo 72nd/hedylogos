@@ -1,4 +1,4 @@
-module github.com/72nd/nohelpline
+module github.com/72nd/hedylogos
 
 go 1.19
 
