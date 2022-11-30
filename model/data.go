@@ -8,19 +8,6 @@ import (
 	"github.com/72nd/hedylogos/graphml"
 )
 
-type DataType string
-
-const (
-	StringType    = DataType("string")
-	IntType       = DataType("int")
-	LanguagesType = DataType("languages")
-	ShapeType     = DataType("shape")
-)
-
-func (t DataType) Instances() []DataType {
-	return []DataType{StringType, IntType, LanguagesType}
-}
-
 type DataValueType interface {
 	string | int | Languages
 }
@@ -31,10 +18,14 @@ func ValueByName[T DataValueType](sto Storage, name string) (*T, error) {
 		return nil, err
 	}
 	rsl, ok := entry.Value.(T)
-	if !ok {
-		return nil, fmt.Errorf("error while trying to cast data entry %s (id: %s) to type %T", entry.Key.Name, entry.Key.ID, new(T))
+	if ok {
+		return &rsl, nil
 	}
-	return &rsl, nil
+	ptRsl, ok := entry.Value.(*T)
+	if ok {
+		return ptRsl, nil
+	}
+	return nil, fmt.Errorf("error while trying to cast data entry %s (id: %s) to type %T", entry.Key.Name, entry.Key.ID, new(T))
 }
 
 // A collection of Data instances. Used only during the construction
@@ -79,7 +70,6 @@ func (s Storage) ByKeyName(name string) (*Data, error) {
 // construction of the model while opening a file.
 type Data struct {
 	Key   Key
-	Type  DataType
 	Value any
 }
 
@@ -90,16 +80,18 @@ func NewData(data graphml.Data, keys Keys) (*Data, error) {
 		return nil, err
 	}
 	if len(data.Languages) != 0 && key.Type == XmlSourceType {
+		langs, err := NewLanguages(data.Languages)
+		if err != nil {
+			return nil, err
+		}
 		return &Data{
 			Key:   *key,
-			Type:  LanguagesType,
-			Value: data.Languages,
+			Value: langs,
 		}, nil
 	}
 	if data.ShapeData.Label != "" && key.Type == XmlSourceType {
 		return &Data{
 			Key:   *key,
-			Type:  ShapeType,
 			Value: data.ShapeData,
 		}, nil
 	}
@@ -111,14 +103,12 @@ func NewData(data graphml.Data, keys Keys) (*Data, error) {
 		}
 		return &Data{
 			Key:   *key,
-			Type:  IntType,
 			Value: value,
 		}, nil
 	}
 	if key.Type == StringSourceType {
 		return &Data{
 			Key:   *key,
-			Type:  StringType,
 			Value: strVal,
 		}, nil
 	}

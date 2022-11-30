@@ -44,8 +44,23 @@ func NewStory(doc graphml.Document) (*Story, error) {
 	if err != nil {
 		return nil, err
 	}
+	author, err := ValueByName[string](*sto, "Author")
+	if err != nil {
+		return nil, err
+	}
+	desc, err := ValueByName[string](*sto, "Description")
+	if err != nil {
+		return nil, err
+	}
+	langs, err := ValueByName[Languages](*sto, "Languages")
+	if err != nil {
+		return nil, err
+	}
 	return &Story{
-		Version: *version,
-		Keys:    *keys,
+		Version:     *version,
+		Author:      *author,
+		Description: *desc,
+		Keys:        *keys,
+		Languages:   *langs,
 	}, nil
 }
