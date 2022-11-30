@@ -42,13 +42,23 @@ type Key struct {
 // provide an implementation for all languages.
 type Language struct {
 	XMLName xml.Name `xml:"language"`
-	ID      string   `xml:"id,attr"`
-	Name    string   `xml:"name,attr"`
-	Value   string   `xml:"value,attr"`
+	// Unique two-letter identifier for the language according to ISO 639-1.
+	// If you're using a local variation of an language (dialect) use the
+	// language code followed by an `_` and a two letter code of the country
+	// region the local variation originates for (example `de_ch` for swiss
+	// german).
+	ID string `xml:"id,attr"`
+	// Name of the language.
+	Name string `xml:"name,attr"`
+	// A number between 0 and 9 which is used to choose the language in an
+	// language menu. Make sure to assign a unique number to each language
+	// in a story.
+	Value string `xml:"value,attr"`
 }
 
 // Custom type. An output type using audio files.
 type Audio struct {
+	XMLName xml.Name `xml:"audio"`
 	// Path to audio file.
 	Source string `xml:"src,attr"`
 	// The ID [Language.ID] of the language which the audio file is in.
@@ -137,7 +147,9 @@ type Document struct {
 }
 
 // Loads a GraphML file with the given path and tries to parse it
-// into a `Document`.
+// into a `Document`.  Please note that this method will not do
+// any checks regarding the specification of an hedylogos input
+// file.
 func FromFile(path string) (*Document, error) {
 	file, err := os.ReadFile(path)
 	if err != nil {
