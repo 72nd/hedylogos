@@ -2,8 +2,10 @@
     "cSpell.words": [
         "edgedefault",
         "hedylogos",
+        "networkx",
         "nodegraphics",
         "roundrectangle",
         "yfiles"
-    ]
+    ],
+    "python.formatting.provider": "yapf"
 }
