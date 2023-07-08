@@ -5,6 +5,7 @@
         "networkx",
         "nodegraphics",
         "roundrectangle",
+        "Typer",
         "yfiles"
     ],
     "python.formatting.provider": "yapf"
