@@ -1,10 +1,9 @@
+import json
 from pathlib import Path
+
 from pydantic import BaseModel, Field
 from typing import Optional
 
-from exception import NoDiGraph
-
-from pathlib import Path
 
 
 class Link(BaseModel):
@@ -92,13 +91,17 @@ class Scenario(BaseModel):
             start_node="start"
         )
     
+    @classmethod
+    def to_json_schema(cls, path: Path):
+        """
+        Saves the the JSON schema of Scenario to a file so it can be used in
+        a graphical JSON editor.
+        """
+        with open(path, "w") as f:
+            f.write(json.dumps(cls.model_json_schema()))
+
     def to_json(self, path: Path):
         """Write the scenario instance to a JSON file."""
         with open(path, "w") as f:
             f.write(self.model_dump_json())
     
-    def to_json_schema(self, path: Path):
-        """
-        Saves the the JSON schema of Scenario to a file so it can be used in
-        a graphical JSON editor.
-        """

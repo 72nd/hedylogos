@@ -38,5 +38,15 @@ def run_mqtt(
     pass
 
 
+@app.command()
+def schema(
+    path: Annotated[Path, typer.Argument(help="output path")]
+):
+    """
+    Writes the JSON Schema of a Scenario file to disk.
+    """
+    Scenario.to_json_schema(path)
+
+
 if __name__ == "__main__":
     app()
