@@ -9,9 +9,9 @@ from typing import Optional
 class Link(BaseModel):
     """Used to define next nodes in a scenario."""
 
-    target: str
+    target: str = Field(examples=["node_id"])
     """Id of the node which the link should point to."""
-    number: int
+    number: int = Field(ge=0, le=10, examples=[0])
     """A number between 0 and 9 for the user to be able to choose the link."""
 
 
@@ -20,11 +20,11 @@ class Node(BaseModel):
     A node represents a state within the graph and contains a audio.
     """
 
-    id: str = Field()
+    id: str = Field(examples=["node_id"])
     """
     Unique identifier of the node. Used to refer to the node in other parts of the scenario.
     """
-    name: str
+    name: str = Field(examples=["A node"])
     """Name of the node for debugging purposes."""
     content: Optional[str]
     """Optional the textual content of the audio in the node."""
@@ -63,9 +63,9 @@ class Scenario(BaseModel):
     It contains all metadata and steps within the story.
     """
 
-    name: str
+    name: str = Field(examples=["The story of the hotline"])
     """The name of the scenario."""
-    description: Optional[str]
+    description: Optional[str] = Field(examples=["Some information about the scenario"])
     """Gives some information about the scenario defined by the graph."""
     authors: list[str]
     """A list of the names."""
