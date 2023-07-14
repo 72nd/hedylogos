@@ -9,7 +9,7 @@ app = typer.Typer()
 
 @app.command()
 def init(
-    path: Annotated[Path, typer.Argument(help="path to input file")]
+    path: Annotated[Path, typer.Argument(help="output path")]
 ):
     """
     Writes a new JSON Scenario files with some example values to the disk.
@@ -20,7 +20,7 @@ def init(
 
 @app.command()
 def run_keyboard(
-    path: Annotated[Path, typer.Argument(help="path to input file")]
+    path: Annotated[Path, typer.Argument(help="path to scenario file")]
 ):
     """
     Runs the scenario using the input form the keyboard.
@@ -30,7 +30,7 @@ def run_keyboard(
 
 @app.command()
 def run_mqtt(
-    path: Annotated[Path, typer.Argument(help="path to input file")]
+    path: Annotated[Path, typer.Argument(help="path to scenario file")]
 ):
     """
     Runs the scenario using the input form the dial via the MQTT server.
