@@ -8,5 +8,6 @@
         "Typer",
         "yfiles"
     ],
-    "python.formatting.provider": "yapf"
+    "python.formatting.provider": "yapf",
+    "cSpell.language": "en,de-DE"
 }

@@ -11,9 +11,7 @@ app = typer.Typer()
 def run(
     path: Annotated[Path, typer.Argument(help="path to input file")]
 ):
-    scenario = Scenario(path)
-    print(scenario['title'])
-
+    pass
 
 if __name__ == "__main__":
     app()
