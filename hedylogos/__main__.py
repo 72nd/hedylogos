@@ -11,14 +11,30 @@ app = typer.Typer()
 def init(
     path: Annotated[Path, typer.Argument(help="path to input file")]
 ):
+    """
+    Writes a new JSON Scenario files with some example values to the disk.
+    """
     scenario = Scenario.init_example()
     scenario.to_json(path)
 
 
 @app.command()
-def run(
+def run_keyboard(
     path: Annotated[Path, typer.Argument(help="path to input file")]
 ):
+    """
+    Runs the scenario using the input form the keyboard.
+    """
+    pass
+
+
+@app.command()
+def run_mqtt(
+    path: Annotated[Path, typer.Argument(help="path to input file")]
+):
+    """
+    Runs the scenario using the input form the dial via the MQTT server.
+    """
     pass
 
 
