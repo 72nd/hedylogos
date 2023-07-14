@@ -10,6 +10,9 @@ from pathlib import Path
 class Link(BaseModel):
     """Used to define next nodes in a scenario."""
 
+    class Config:
+        populate_by_name = True
+
     target: str
     """Id of the node which the link should point to."""
     number: int
@@ -31,14 +34,30 @@ class Node(BaseModel):
     """Optional the textual content of the audio in the node."""
     audio: Path
     """Path to the audio file."""
+    links: Optional[list[Link]]
+    """Links to other nodes next in the story/scenario line."""
 
     @classmethod
-    def init_example(cls) -> "Node":
+    def start_example(cls) -> "Node":
         return cls(
             id="start",
-            name = "Start Node",
+            name="Start Node",
             content=None,
             audio=Path("start.mp3"),
+            links=[Link(
+                target="start",
+                number=1,
+            )]
+        )
+    
+    @classmethod
+    def additional_example(cls) -> "Node":
+        return cls(
+            id="another",
+            name="Another node",
+            content="Hello this is the content text",
+            audio=Path("another.mp3"),
+            links=None,
         )
 
 
@@ -72,7 +91,7 @@ class Scenario(BaseModel):
             name="A interactive Scenario",
             description="This is an almost empty scenario file",
             authors=["Max Mustermann"],
-            nodes=[Node.init_example()],
+            nodes=[Node.start_example()],
             start_node="start"
         )
     
