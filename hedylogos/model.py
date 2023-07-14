@@ -64,6 +64,13 @@ class Nodes(RootModel[list[Node]]):
     """
     root: list[Node]
 
+    @classmethod
+    def init_example(cls) -> "Nodes":
+        """Returns a instance of the model with some initial data."""
+        return cls(
+            root=[Node.start_example()]
+        )
+
 
 class Scenario(BaseModel):
     """
@@ -95,7 +102,7 @@ class Scenario(BaseModel):
             name="A interactive Scenario",
             description="This is an almost empty scenario file",
             authors=["Max Mustermann"],
-            nodes=[Node.start_example()],
+            nodes=Nodes.init_example(),
             start_node="start"
         )
     
