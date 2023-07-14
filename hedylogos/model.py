@@ -10,9 +10,6 @@ from pathlib import Path
 class Link(BaseModel):
     """Used to define next nodes in a scenario."""
 
-    class Config:
-        populate_by_name = True
-
     target: str
     """Id of the node which the link should point to."""
     number: int
@@ -80,7 +77,7 @@ class Scenario(BaseModel):
 
     @classmethod
     def from_json(cls, path: Path) -> "Scenario":
-        """Reads a `Scenario` instance from a file."""
+        """Reads a `Scenario` instance from a JSON file."""
         with open(path, "r") as f:
             return cls.model_validate_json(f.read())
     
@@ -96,5 +93,12 @@ class Scenario(BaseModel):
         )
     
     def to_json(self, path: Path):
-        with open(path, "r") as f:
-            f.write(self.model_dump_json(by_alias=True))
+        """Write the scenario instance to a JSON file."""
+        with open(path, "w") as f:
+            f.write(self.model_dump_json())
+    
+    def to_json_schema(self, path: Path):
+        """
+        Saves the the JSON schema of Scenario to a file so it can be used in
+        a graphical JSON editor.
+        """
