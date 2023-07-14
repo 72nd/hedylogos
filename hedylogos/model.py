@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, RootModel
 from typing import Optional
 
 
@@ -57,6 +57,14 @@ class Node(BaseModel):
         )
 
 
+class Nodes(RootModel[list[Node]]):
+    """
+    A collection of nodes. Has it's own class to write a validator which
+    makes sure all `Node.id` are unique.
+    """
+    root: list[Node]
+
+
 class Scenario(BaseModel):
     """
     The scenario represents the base data structure of an story scenario.
@@ -69,7 +77,7 @@ class Scenario(BaseModel):
     """Gives some information about the scenario defined by the graph."""
     authors: list[str]
     """A list of the names."""
-    nodes: list[Node]
+    nodes: Nodes
     """All nodes of the scenario."""
     start_node: str
     """The id of the node which the scenario should start with."""
