@@ -3,7 +3,7 @@ import queue
 from pathlib import Path
 from threading import Thread
 import time
-from typing import Optional, Tuple
+from typing import Optional
 import wave
 
 import pyaudio
@@ -31,12 +31,15 @@ class Player(Thread):
         self.__stream: Optional[pyaudio.Stream] = None
 
     def play(self, path: Path):
+        """Load an play an audio file."""
         self.__queue.put(_PlayerCommand(_PlayerAction.PLAY, path))
     
     def stop(self):
+        """Stop the playback."""
         self.__queue.put(_PlayerCommand(_PlayerAction.STOP, None))
     
     def quit(self):
+        """Stops the playback (if running) and ends the thread."""
         self.__queue.put(_PlayerCommand(_PlayerAction.QUIT, None))
     
     def run(self):
@@ -49,12 +52,12 @@ class Player(Thread):
                 time.sleep(0.1)
             if not command:
                 continue
+
             if command.action is _PlayerAction.PLAY:
                 self.__play(command.path)
             elif command.action is _PlayerAction.STOP:
                 self.__stop()
             elif command.action is _PlayerAction.QUIT:
-                print(quit)
                 self.__stop()
                 self.__pyaudio.terminate()
                 break
