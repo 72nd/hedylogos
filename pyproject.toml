@@ -1,0 +1,18 @@
+[project]
+name = "hedylogos"
+authors = [
+    {name = "72nd", email = "msg@frg72.com"}
+]
+description = "Interactive scenarios for dial phones"
+dynamic = ["version"]
+dependencies = [
+    "pyaudio",
+    "pydantic",
+    "typer", 
+]
+
+[tool.setuptools]
+packages = ["hedylogos"]
+
+[project.scripts]
+hedylogos = "hedylogos:__main__.app"
