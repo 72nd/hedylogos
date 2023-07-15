@@ -1,5 +1,5 @@
 from .model import Scenario
-from .player import PlayerAction, Player
+from .player import Player
 
 from pathlib import Path
 import time
@@ -57,11 +57,12 @@ def test(
     """It's a test."""
     player = Player()
     player.start()
-    player.send_command(PlayerAction.PLAY, path)
-    time.sleep(10)
-    player.send_command(PlayerAction.STOP)
-    time.sleep(1)
-    player.send_command(PlayerAction.QUIT)
+    player.play(path)
+    time.sleep(4)
+    player.stop()
+    player.play(Path("share/error.wav"))
+    time.sleep(5)
+    player.quit()
 
 
 if __name__ == "__main__":

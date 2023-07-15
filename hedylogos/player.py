@@ -9,7 +9,7 @@ import wave
 import pyaudio
 
 
-class PlayerAction(str, Enum):
+class _PlayerAction(str, Enum):
     """Commands which can be sent to the player thread."""
     PLAY = "play"
     STOP = "stop"
@@ -17,7 +17,7 @@ class PlayerAction(str, Enum):
 
 
 class _PlayerCommand:
-    def __init__(self, action: PlayerAction, path: Optional[Path]):
+    def __init__(self, action: _PlayerAction, path: Optional[Path]):
         self.action = action
         self.path = path
 
@@ -30,8 +30,14 @@ class Player(Thread):
         self.__wave: Optional[wave.Wave_read] = None
         self.__stream: Optional[pyaudio.Stream] = None
 
-    def send_command(self, action: PlayerAction, path: Optional[Path]=None):
-        self.__queue.put(_PlayerCommand(action, path))
+    def play(self, path: Path):
+        self.__queue.put(_PlayerCommand(_PlayerAction.PLAY, path))
+    
+    def stop(self):
+        self.__queue.put(_PlayerCommand(_PlayerAction.STOP, None))
+    
+    def quit(self):
+        self.__queue.put(_PlayerCommand(_PlayerAction.QUIT, None))
     
     def run(self):
         while True:
@@ -43,17 +49,19 @@ class Player(Thread):
                 time.sleep(0.1)
             if not command:
                 continue
-            if command.action is PlayerAction.PLAY:
+            if command.action is _PlayerAction.PLAY:
                 self.__play(command.path)
-            elif command.action is PlayerAction.STOP:
+            elif command.action is _PlayerAction.STOP:
                 self.__stop()
-            elif command.action is PlayerAction.QUIT:
+            elif command.action is _PlayerAction.QUIT:
                 print(quit)
+                self.__stop()
                 self.__pyaudio.terminate()
                 break
     
     def __play(self, path: Path):
-        print(f"play {path}")
+        if self.__wave or self.__stream:
+            raise RuntimeError("stop running audio before starting another one")
         self.__wave = wave.open(str(path), "rb")
         self.__stream = self.__pyaudio.open(
             format=self.__pyaudio.get_format_from_width(self.__wave.getsampwidth()),
