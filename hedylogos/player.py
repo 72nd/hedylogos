@@ -9,15 +9,15 @@ import wave
 import pyaudio
 
 
-class _Action(str, Enum):
+class _PlayerAction(str, Enum):
     """Commands which can be sent to the player thread."""
     PLAY = "play"
     STOP = "stop"
     QUIT = "quit"
 
 
-class _Command:
-    def __init__(self, action: _Action, path: Optional[Path]):
+class _PlayerCommand:
+    def __init__(self, action: _PlayerAction, path: Optional[Path]):
         self.action = action
         self.path = path
 
@@ -32,15 +32,15 @@ class Player(Thread):
 
     def play(self, path: Path):
         """Load an play an audio file."""
-        self.__queue.put(_Command(_Action.PLAY, path))
+        self.__queue.put(_PlayerCommand(_PlayerAction.PLAY, path))
     
     def stop(self):
         """Stop the playback."""
-        self.__queue.put(_Command(_Action.STOP, None))
+        self.__queue.put(_PlayerCommand(_PlayerAction.STOP, None))
     
     def quit(self):
         """Stops the playback (if running) and ends the thread."""
-        self.__queue.put(_Command(_Action.QUIT, None))
+        self.__queue.put(_PlayerCommand(_PlayerAction.QUIT, None))
     
     def run(self):
         while True:
@@ -52,15 +52,15 @@ class Player(Thread):
                 time.sleep(0.1)
             if not command:
                 continue
-            match command.action:
-                case _Action.PLAY:
-                    self.__play(command.path)
-                case _Action.STOP:
-                    self.__stop()
-                case _Action.QUIT:
-                    self.__stop()
-                    self.__pyaudio.terminate()
-                    break
+
+            if command.action is _PlayerAction.PLAY:
+                self.__play(command.path)
+            elif command.action is _PlayerAction.STOP:
+                self.__stop()
+            elif command.action is _PlayerAction.QUIT:
+                self.__stop()
+                self.__pyaudio.terminate()
+                break
     
     def __play(self, path: Path):
         if self.__wave or self.__stream:

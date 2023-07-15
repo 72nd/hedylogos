@@ -49,14 +49,14 @@ class Controller(Thread):
     def run(self):
         while True:
             command = self.__queue.get()
-            match command.action:
-                case _Action.PICK_UP:
-                    # TODO Start with scenario
-                    pass
-                case _Action.HANG_UP:
-                    self.__player.stop()
-                case _Action.NUMBER:
-                    # TODO: Play the correct file
-                    pass
-                case _Action.QUIT:
-                    self.__player.quit()
+            if command.action is _Action.PICK_UP:
+                # TODO Start with scenario
+                pass
+            elif command.action is _Action.HANG_UP:
+                # TODO: Probably more code
+                self.__player.stop()
+            elif command.action is _Action.NUMBER:
+                # TODO: Play the correct file
+                pass
+            elif command.action is _Action.QUIT:
+                self.__player.quit()
