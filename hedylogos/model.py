@@ -6,6 +6,9 @@ from pydantic import BaseModel, Field, RootModel, field_validator
 from typing import Optional
 
 
+def format_str_list(data: list[str]):
+    return f"\'{', '.join(data)}\'"
+
 
 class Link(BaseModel):
     """Used to define next nodes in a scenario."""
@@ -71,16 +74,29 @@ class Nodes(RootModel[list[Node]]):
         return cls(
             root=[Node.start_example()]
         )
-    
-    @field_validator("root")
-    def check_unique_id(cls, v):
+
+    @field_validator("root", mode="after")
+    def check_nodes(cls, v):
         ids = [node.id for node in v]
+        cls.__check_unique_ids(v, ids)
+        cls.__check_valid_link_targets(v, ids)
+    
+    @staticmethod
+    def __check_unique_ids(v: list[Node], ids: list[str]):
         counter = Counter(ids)
         duplicates = [id for id, count in counter.items() if count > 1]
         if len(duplicates) > 0:
-            raise ValueError(f"Node ids \'{', '.join(duplicates)}\' not unique")
-
-
+            raise ValueError(f"node id(s) {format_str_list(duplicates)} not unique")
+    
+    @staticmethod
+    def __check_valid_link_targets(v: list[Node], ids: list[str]):
+        for node in v:
+            if node.links is None:
+                continue
+            invalid = [link.target for link in node.links if link.target not in ids]
+            if len(invalid) != 0:
+                raise ValueError(f"node '{node.id}' has invalid link target(s) {format_str_list(invalid)}")
+    
 
 class Scenario(BaseModel):
     """
