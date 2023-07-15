@@ -1,6 +1,5 @@
 from .controller import Controller
 from .model import Scenario
-from .player import Player
 from .receiver import KeyboardReceiver, MqttReceiver
 
 from pathlib import Path
@@ -56,21 +55,6 @@ def schema(
     Writes the JSON Schema of a Scenario file to disk.
     """
     Scenario.to_json_schema(path)
-
-
-@app.command()
-def test(
-    path: Annotated[Path, typer.Argument(help="audio file")]
-):
-    """It's a test."""
-    player = Player()
-    player.start()
-    player.play(path)
-    time.sleep(4)
-    player.stop()
-    player.play(Path("share/error.wav"))
-    time.sleep(5)
-    player.quit()
 
 
 if __name__ == "__main__":
