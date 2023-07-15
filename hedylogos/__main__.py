@@ -25,7 +25,7 @@ def run_keyboard(
     """
     Runs the scenario using the input form the keyboard.
     """
-    pass
+    scenario = Scenario.from_json(path)
 
 
 @app.command()

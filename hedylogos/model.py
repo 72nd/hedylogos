@@ -1,7 +1,8 @@
+from collections import Counter
 import json
 from pathlib import Path
 
-from pydantic import BaseModel, Field, RootModel
+from pydantic import BaseModel, Field, RootModel, field_validator
 from typing import Optional
 
 
@@ -11,7 +12,7 @@ class Link(BaseModel):
 
     target: str = Field(examples=["node_id"])
     """Id of the node which the link should point to."""
-    number: int = Field(ge=0, le=10, examples=[0])
+    number: Optional[int] = Field(ge=0, le=9, examples=[0])
     """A number between 0 and 9 for the user to be able to choose the link."""
 
 
@@ -70,6 +71,15 @@ class Nodes(RootModel[list[Node]]):
         return cls(
             root=[Node.start_example()]
         )
+    
+    @field_validator("root")
+    def check_unique_id(cls, v):
+        ids = [node.id for node in v]
+        counter = Counter(ids)
+        duplicates = [id for id, count in counter.items() if count > 1]
+        if len(duplicates) > 0:
+            raise ValueError(f"Node ids \'{', '.join(duplicates)}\' not unique")
+
 
 
 class Scenario(BaseModel):
