@@ -75,27 +75,32 @@ class Nodes(RootModel[list[Node]]):
             root=[Node.start_example()]
         )
 
-    @field_validator("root", mode="after")
-    def check_nodes(cls, v):
+    @field_validator("root")
+    def check_unique_ids(cls, v):
         ids = [node.id for node in v]
-        cls.__check_unique_ids(v, ids)
-        cls.__check_valid_link_targets(v, ids)
-    
-    @staticmethod
-    def __check_unique_ids(v: list[Node], ids: list[str]):
         counter = Counter(ids)
         duplicates = [id for id, count in counter.items() if count > 1]
         if len(duplicates) > 0:
             raise ValueError(f"node id(s) {format_str_list(duplicates)} not unique")
-    
-    @staticmethod
-    def __check_valid_link_targets(v: list[Node], ids: list[str]):
+        return v
+
+    @field_validator("root")
+    def check_valid_link_targets(cls, v):
+        ids = [node.id for node in v]
         for node in v:
             if node.links is None:
                 continue
             invalid = [link.target for link in node.links if link.target not in ids]
             if len(invalid) != 0:
                 raise ValueError(f"node '{node.id}' has invalid link target(s) {format_str_list(invalid)}")
+        return v
+    
+    def as_dict(self) -> dict[str, Node]:
+        """Returns a dict of the Nodes with id as their keys."""
+        rsl: dict[str, Node] = {}
+        for node in self.root:
+            rsl[node.id] = node
+        return rsl
     
 
 class Scenario(BaseModel):
@@ -114,6 +119,7 @@ class Scenario(BaseModel):
     """All nodes of the scenario."""
     start_node: str
     """The id of the node which the scenario should start with."""
+    nodes_dict: Optional[dict[str, Node]] = Field(exclude=True, default=None)
 
     @classmethod
     def from_json(cls, path: Path) -> "Scenario":
@@ -146,3 +152,12 @@ class Scenario(BaseModel):
         with open(path, "w") as f:
             f.write(self.model_dump_json())
     
+    def start(self) -> Node:
+        if self.start_node not in self.__get_nodes_dict():
+            raise KeyError(f"no Node for start_node '{self.start_node} found")
+        return self.__get_nodes_dict()[self.start_node]
+
+    def __get_nodes_dict(self) -> dict[str, Node]:
+        if not self.nodes_dict:
+            self.nodes_dict = self.nodes.as_dict()
+        return self.nodes_dict

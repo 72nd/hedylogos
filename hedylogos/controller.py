@@ -1,4 +1,4 @@
-from .model import Scenario
+from .model import Node, Scenario
 from .player import Player
 
 from enum import Enum
@@ -27,7 +27,9 @@ class Controller(Thread):
         super().__init__()
         self.__queue = queue.Queue()
         self.__player = Player()
+        self.__player.start()
         self.__scenario = scenario
+        self.__current_node: Optional[Node] = None
     
     def pick_up(self):
         """Someone picked up the phone."""
@@ -50,7 +52,8 @@ class Controller(Thread):
             command = self.__queue.get()
             if command.action is _Action.PICK_UP:
                 # TODO Start with scenario
-                pass
+                self.__current_node = self.__scenario.start()
+                self.__player.play(self.__current_node.audio)
             elif command.action is _Action.HANG_UP:
                 # TODO: Probably more code
                 self.__player.stop()
