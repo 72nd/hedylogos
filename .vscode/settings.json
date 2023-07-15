@@ -7,6 +7,7 @@
         "networkx",
         "nodegraphics",
         "roundrectangle",
+        "simpleaudio",
         "Typer",
         "yfiles"
     ],
