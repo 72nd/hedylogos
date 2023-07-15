@@ -60,6 +60,14 @@ class Node(BaseModel):
             links=None,
         )
 
+    def next_node_id_by_number(self, number: int) -> Optional[str]:
+        """Returns the id of a linked node if the number is valid."""
+        if not self.links:
+            return None 
+        for link in self.links:
+            if link.number == number:
+                return link.target
+        return None
 
 class Nodes(RootModel[list[Node]]):
     """
@@ -153,11 +161,11 @@ class Scenario(BaseModel):
             f.write(self.model_dump_json())
     
     def start(self) -> Node:
-        if self.start_node not in self.__get_nodes_dict():
+        if self.start_node not in self.get_nodes_dict():
             raise KeyError(f"no Node for start_node '{self.start_node} found")
-        return self.__get_nodes_dict()[self.start_node]
+        return self.get_nodes_dict()[self.start_node]
 
-    def __get_nodes_dict(self) -> dict[str, Node]:
+    def get_nodes_dict(self) -> dict[str, Node]:
         if not self.nodes_dict:
             self.nodes_dict = self.nodes.as_dict()
         return self.nodes_dict

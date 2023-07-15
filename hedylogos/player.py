@@ -84,7 +84,6 @@ class Player(Thread):
         )
     
     def __stop(self):
-        print("stop")
         if not self.__stream or not self.__wave:
             return
         self.__stream.stop_stream()
