@@ -1,5 +1,7 @@
+from .controller import Controller
 from .model import Scenario
 from .player import Player
+from .receiver import KeyboardReceiver, MqttReceiver
 
 from pathlib import Path
 import time
@@ -28,6 +30,9 @@ def run_keyboard(
     Runs the scenario using the input form the keyboard.
     """
     scenario = Scenario.from_json(path)
+    controller = Controller(scenario)
+    receiver = KeyboardReceiver(controller)
+    receiver.run()
 
 
 @app.command()
@@ -37,7 +42,10 @@ def run_mqtt(
     """
     Runs the scenario using the input form the dial via the MQTT server.
     """
-    pass
+    scenario = Scenario.from_json(path)
+    controller = Controller(scenario)
+    receiver = MqttReceiver(controller)
+    receiver.run()
 
 
 @app.command()

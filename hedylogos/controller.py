@@ -12,7 +12,7 @@ class _Action(str, Enum):
 
     PICK_UP = "pick_up"
     HANG_UP = "hang_up"
-    NUMBER = "number"
+    DIAL = "dial"
     QUIT = "quit"
 
 
@@ -37,14 +37,13 @@ class Controller(Thread):
         """The phone was hung up therefore ending the execution and resetting."""
         self.__queue.put(_Command(_Action.HANG_UP))
 
-    def number(self, number: int):
+    def dial(self, number: int):
         """A number input occurred."""
-        self.__queue.put(_Command(_Action.NUMBER, number))
+        self.__queue.put(_Command(_Action.DIAL, number))
     
     def quit(self):
         """Quit execution."""
         self.__queue.put(_Command(_Action.QUIT))
-
 
     def run(self):
         while True:
@@ -55,8 +54,9 @@ class Controller(Thread):
             elif command.action is _Action.HANG_UP:
                 # TODO: Probably more code
                 self.__player.stop()
-            elif command.action is _Action.NUMBER:
+            elif command.action is _Action.DIAL:
                 # TODO: Play the correct file
                 pass
             elif command.action is _Action.QUIT:
                 self.__player.quit()
+                break
