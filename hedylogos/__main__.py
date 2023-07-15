@@ -1,6 +1,8 @@
-from model import Scenario
+from .model import Scenario
+from .player import PlayerAction, Player
 
 from pathlib import Path
+import time
 from typing_extensions import Annotated
 
 import typer
@@ -46,6 +48,20 @@ def schema(
     Writes the JSON Schema of a Scenario file to disk.
     """
     Scenario.to_json_schema(path)
+
+
+@app.command()
+def test(
+    path: Annotated[Path, typer.Argument(help="audio file")]
+):
+    """It's a test."""
+    player = Player()
+    player.start()
+    player.send_command(PlayerAction.PLAY, path)
+    time.sleep(10)
+    player.send_command(PlayerAction.STOP)
+    time.sleep(1)
+    player.send_command(PlayerAction.QUIT)
 
 
 if __name__ == "__main__":
