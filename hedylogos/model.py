@@ -67,7 +67,7 @@ class Node(BaseModel):
             return v
         is_none = False
         if v[0].number is None:
-            is_none = False
+            is_none = True
         for link in v:
             if link.number is None and not is_none:
                 raise ValueError("mixed use of numbers and None in links")
