@@ -48,11 +48,17 @@ class Player(Thread):
 
 
 class Controller(Thread):
-    def __init__(self, scenario: Scenario):
+    """
+    The controller handles the playback of the audio files and reacts to events
+    with the phone.
+    """
+    def __init__(self, scenario: Scenario, scenario_path: Path):
         super().__init__()
+        self.__scenario = scenario
+        self.__scenario_location = scenario_path.resolve().parent
+        print(self.__scenario_location)
         self.__queue: queue.Queue = queue.Queue()
         self.__player: Optional[Player] = None
-        self.__scenario = scenario
         self.__current_node: Optional[Node] = None
     
     def pick_up(self):
@@ -76,7 +82,10 @@ class Controller(Thread):
             command = self.__queue.get()
             if command.action is _Action.PICK_UP:
                 self.__current_node = self.__scenario.start()
-                self.__player = Player(self.__current_node.audio, self.__queue)
+                self.__player = Player(
+                    self.__resolve_path(self.__current_node.audio),
+                    self.__queue
+                )
                 self.__player.start()
             elif command.action is _Action.HANG_UP:
                 self.__current_node = None
@@ -92,7 +101,10 @@ class Controller(Thread):
                 if self.__player:
                     self.__player.stop()
                 self.__current_node = self.__scenario.get_nodes_dict()[target]
-                self.__player = Player(self.__current_node.audio, self.__queue)
+                self.__player = Player(
+                    self.__resolve_path(self.__current_node.audio),
+                    self.__queue
+                )
                 self.__player.start()
             elif command.action is _Action.PLAYBACK_ENDED:
                 print("ended by itself")
@@ -100,3 +112,7 @@ class Controller(Thread):
                 if self.__player:
                     self.__player.stop()
                 break
+    
+    def __resolve_path(self, path: Path):
+        """Used to resolve paths relative to the scenario file."""
+        return (self.__scenario_location / path).resolve()

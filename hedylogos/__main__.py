@@ -29,7 +29,7 @@ def run_keyboard(
     Runs the scenario using the input form the keyboard.
     """
     scenario = Scenario.from_json(path)
-    controller = Controller(scenario)
+    controller = Controller(scenario, path)
     receiver = KeyboardReceiver(controller)
     receiver.run()
 
@@ -42,7 +42,7 @@ def run_mqtt(
     Runs the scenario using the input form the dial via the MQTT server.
     """
     scenario = Scenario.from_json(path)
-    controller = Controller(scenario)
+    controller = Controller(scenario, path)
     receiver = MqttReceiver(controller)
     receiver.run()
 
