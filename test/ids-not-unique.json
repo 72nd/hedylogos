@@ -1,0 +1,34 @@
+{
+    "name": "A interactive Scenario",
+    "description": "This is an almost empty scenario file",
+    "authors": [
+        "Max Mustermann"
+    ],
+    "nodes": [
+        {
+            "id": "start",
+            "name": "Start Node",
+            "content": null,
+            "audio": "start.mp3",
+            "links": [
+                {
+                    "target": "start",
+                    "number": 1
+                }
+            ]
+        },
+        {
+            "id": "start",
+            "name": "Start Node",
+            "content": null,
+            "audio": "start.mp3",
+            "links": [
+                {
+                    "target": "start",
+                    "number": 1
+                }
+            ]
+        }
+    ],
+    "start_node": "start"
+}

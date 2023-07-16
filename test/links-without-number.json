@@ -1,0 +1,44 @@
+{
+    "name": "A interactive Scenario",
+    "description": "This is an almost empty scenario file",
+    "authors": [
+        "Max Mustermann"
+    ],
+    "invalid_number_audio": "audio/delta.wav",
+    "invalid_number_fun_audio": null,
+    "internal_error_audio": "audio/echo.wav",
+    "end_call_audio": "audio/foxtrot.wav",
+    "nodes": [
+        {
+            "id": "start",
+            "name": "Start Node",
+            "content": null,
+            "audio": "audio/alfa.wav",
+            "links": [
+                {
+                    "target": "bravo",
+                    "number": null
+                },
+                {
+                    "target": "charlie",
+                    "number": null
+                }
+            ]
+        },
+        {
+            "id": "bravo",
+            "name": "Bravo",
+            "content": null,
+            "audio": "audio/bravo.wav",
+            "links": null
+        },
+        {
+            "id": "charlie",
+            "name": "Charlie",
+            "content": null,
+            "audio": "audio/charlie.wav",
+            "links": null
+        }
+    ],
+    "start_node": "start"
+}
