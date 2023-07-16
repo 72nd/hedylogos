@@ -140,7 +140,7 @@ class Controller(Thread):
             return
         if self.__player:
             self.__player.stop()
-        self.__current_node = self.__scenario.get_nodes_dict()[target]
+        self.__current_node = self.__scenario.node_by_id(target)
         self.__start_playback(self.__current_node.audio)
     
     def __on_invalid_number(self):
@@ -159,10 +159,23 @@ class Controller(Thread):
         self.__plays_invalid_audio = True
 
     def __on_playback_ended(self):
-        if self.__plays_invalid_audio and self.__current_node:
+        if not self.__current_node:
+            # Block only here vor more clarity, happens when a scenario ended.
+            pass
+        elif self.__plays_invalid_audio:
+            # Invalid audio playback ended, replay the current node.
             self.__start_playback(self.__current_node.audio)
             self.__plays_invalid_audio = False
-        print("ended by itself")
+        elif not self.__current_node.links:
+            # The current node has no links defined so the scenario execution ends.
+            self.__current_node = None
+            self.__start_playback(self.__scenario.end_call_audio)
+        elif self.__current_node.has_unnumbered_links():
+            selected_link = self.__current_node.random_link()
+            if not selected_link:
+                raise RuntimeError("tried to get an random link on a node with no links")
+            self.__current_node = self.__scenario.node_by_id(selected_link.target)
+            self.__start_playback(self.__current_node.audio)
 
     def __on_quit(self):
         if self.__player:

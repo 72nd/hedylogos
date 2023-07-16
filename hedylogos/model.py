@@ -2,6 +2,7 @@ from collections import Counter
 from dataclasses import field
 import json
 from pathlib import Path
+import random
 
 from pydantic import BaseModel, Field, RootModel, field_validator
 from typing import Optional
@@ -81,6 +82,19 @@ class Node(BaseModel):
             if link.number == number:
                 return link.target
         return None
+    
+    def random_link(self) -> Optional[Link]:
+        """Selects randomly one of the links of the node."""
+        if not self.links:
+            return None
+        return random.choice(self.links)
+    
+    def has_unnumbered_links(self) -> bool:
+        """Returns whether links have numbers assigned to them."""
+        if not self.links:
+            return False
+        return len([link for link in self.links if not link.number]) > 0
+
 
 class Nodes(RootModel[list[Node]]):
     """
@@ -189,11 +203,19 @@ class Scenario(BaseModel):
             f.write(self.model_dump_json())
     
     def start(self) -> Node:
+        """Returns the start node."""
         if self.start_node not in self.get_nodes_dict():
             raise KeyError(f"no Node for start_node '{self.start_node} found")
         return self.get_nodes_dict()[self.start_node]
 
     def get_nodes_dict(self) -> dict[str, Node]:
+        """Returns a dict of all nodes with their id as key."""
         if not self.nodes_dict:
             self.nodes_dict = self.nodes.as_dict()
         return self.nodes_dict
+    
+    def node_by_id(self, id: str) -> Node:
+        try:
+            return self.get_nodes_dict()[id]
+        except KeyError:
+            raise KeyError(f"there is no node with '{id}' in the scenario")
