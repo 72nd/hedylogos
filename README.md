@@ -5,9 +5,22 @@
 </p>
 
 
-Hedylogos allows the creation of interactive audio scenarios using the [yEd graph editor](https://www.yworks.com/products/yed). The scenarios can be played on a old dial phone as well as a normal computer which has a number pad attached. 
+Hedylogos allows the creation of interactive audio scenarios using JSON files.
 
 
 ## Funding
 
 Hedylogos was created for the []
+
+
+## Installation
+
+
+## ToDo Documentation
+
+- Link auf Deutsche Version
+- Link auf Website
+- Installation
+- Editor
+- Benutzung
+- Logo und Nennung Ministerium

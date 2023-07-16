@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Hedylogos Szenario Editor</title>
+  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Hedylogos Szenario Editor</h1>
+    <p>
+      Mit diesem Editor kannst du einfach audio Szenarios für Hedylogos erstellen. Dieser Editor basiert auf dem <a
+        href="https://github.com/json-editor/json-editor">JSON Editor</a> und <a href="https://json-editor.github.io/json-editor/form-submission.html">diesem Beispiel</a>. Mehr über Hedylogos kannst du <a href="https://github.com/72nd/hedylogos">hier</a> erfahren.
+    </p>
+    <p>
+      With this editor you can easily create audio scenarios for Hedylogos. This editor is based on the <a
+        href="https://github.com/json-editor/json-editor">JSON Editor</a> and <a href="https://json-editor.github.io/json-editor/form-submission.html">this example</a>. To learn more about Hedylogos see our <a href="https://github.com/72nd/hedylogos">GitHub Repository</a>.
+    </p>
+    <div class="form-group"></div>
+    <form action="/docs/form-submission.html" method="get">
+      <input id="input" type="hidden" name="json">
+      <div id='editor-container'></div>
+    </form>
+    <button class="btn btn-primary" onclick="download()">Runterladen/Download</button>
+    <button class="btn btn-primary" onclick="copy()">Kopieren/Copy</button>
+    <br>
+    <h2>Get params</h2>
+    <pre id="get-params"></pre>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+  <script>
+    var params = {}
+    for (const [key, value] of new URLSearchParams(window.location.search).entries()) {
+      params[key] = value
+      console.log(key, value)
+    }
+    document.querySelector('#get-params').textContent = JSON.stringify(params, null, 2)
+    var config = {
+      use_name_attributes: false,
+      theme: 'bootstrap5',
+      disable_edit_json: false,
+      disable_properties: true,
+      disable_collapse: true,
+      schema: {
+        "$defs": {
+          "Link": {
+            "description": "Used to define next nodes in a scenario.",
+            "properties": {
+              "target": {
+                "examples": [
+                  "node_id"
+                ],
+                "title": "Target",
+                "type": "string"
+              },
+              "number": {
+                "anyOf": [
+                  {
+                    "maximum": 9,
+                    "minimum": 0,
+                    "type": "integer"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "examples": [
+                  0
+                ],
+                "title": "Number"
+              }
+            },
+            "required": [
+              "target",
+              "number"
+            ],
+            "title": "Link",
+            "type": "object"
+          },
+          "Node": {
+            "description": "\n    A node represents a state within the graph and contains a audio.\n    ",
+            "properties": {
+              "id": {
+                "examples": [
+                  "node_id"
+                ],
+                "title": "Id",
+                "type": "string"
+              },
+              "name": {
+                "examples": [
+                  "A node"
+                ],
+                "title": "Name",
+                "type": "string"
+              },
+              "content": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Content"
+              },
+              "audio": {
+                "format": "path",
+                "title": "Audio",
+                "type": "string"
+              },
+              "links": {
+                "anyOf": [
+                  {
+                    "items": {
+                      "$ref": "#/$defs/Link"
+                    },
+                    "type": "array"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "title": "Links"
+              }
+            },
+            "required": [
+              "id",
+              "name",
+              "content",
+              "audio",
+              "links"
+            ],
+            "title": "Node",
+            "type": "object"
+          },
+          "Nodes": {
+            "description": "\n    A collection of nodes. Has it's own class to write a validator which\n    makes sure all `Node.id` are unique.\n    ",
+            "items": {
+              "$ref": "#/$defs/Node"
+            },
+            "title": "Nodes",
+            "type": "array"
+          }
+        },
+        "description": "\n    The scenario represents the base data structure of an story scenario.\n    It contains all metadata and steps within the story.\n    ",
+        "properties": {
+          "name": {
+            "examples": [
+              "The story of the hotline"
+            ],
+            "title": "Name",
+            "type": "string"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "examples": [
+              "Some information about the scenario"
+            ],
+            "title": "Description"
+          },
+          "authors": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Authors",
+            "type": "array"
+          },
+          "nodes": {
+            "$ref": "#/$defs/Nodes"
+          },
+          "start_node": {
+            "title": "Start Node",
+            "type": "string"
+          },
+          "invalid_number_audio": {
+            "format": "path",
+            "title": "Invalid Number Audio",
+            "type": "string"
+          },
+          "invalid_number_fun_audio": {
+            "anyOf": [
+              {
+                "format": "path",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Invalid Number Fun Audio"
+          },
+          "internal_error_audio": {
+            "format": "path",
+            "title": "Internal Error Audio",
+            "type": "string"
+          },
+          "end_call_audio": {
+            "format": "path",
+            "title": "End Call Audio",
+            "type": "string"
+          },
+          "nodes_dict": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "$ref": "#/$defs/Node"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Nodes Dict"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "authors",
+          "nodes",
+          "start_node",
+          "invalid_number_audio",
+          "invalid_number_fun_audio",
+          "internal_error_audio",
+          "end_call_audio"
+        ],
+        "title": "Scenario",
+        "type": "object"
+      }
+    }
+
+    var editor = new JSONEditor(document.querySelector('#editor-container'), config)
+
+    /*
+    editor.on('change', function () {
+      document.querySelector('#input').value = JSON.stringify(editor.getValue())
+    })
+    */
+
+    function copy() {
+      var dummy = document.createElement("textarea");
+      document.body.appendChild(dummy);
+      dummy.value = JSON.stringify(editor.getValue());
+      dummy.select();
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
+    }
+
+    function download() {
+      const text = JSON.stringify(editor.getValue());
+      var element = document.createElement("a");
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+      element.setAttribute('download', "scenario.json");
+      element.style.display = "none";
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+  </script>
+</body>
+
+</html>
