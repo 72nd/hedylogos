@@ -6,8 +6,8 @@ authors = [
 description = "Interactive scenarios for dial phones"
 dynamic = ["version"]
 dependencies = [
-    "pyaudio",
     "pydantic",
+    "simpleaudio",
     "typer", 
 ]
 

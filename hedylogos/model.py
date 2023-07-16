@@ -139,8 +139,19 @@ class Scenario(BaseModel):
     nodes: Nodes
     """All nodes of the scenario."""
     start_node: str
-    """The id of the node which the scenario should start with."""
+    """Id of the node the execution should start."""
+    invalid_number_audio: Path
+    """Audio played when the user dials an invalid number."""
+    invalid_number_fun_audio: Optional[Path]
+    """
+    Optional fun audio played when the user dials an invalid number. Played by 25% chance.
+    """
+    internal_error_audio: Path
+    """Audio played when an internal error occurred."""
+    end_call_audio: Path
+    """Audio played when scenario ends."""
     nodes_dict: Optional[dict[str, Node]] = Field(exclude=True, default=None)
+    """The id of the node which the scenario should start with."""
 
     @classmethod
     def from_json(cls, path: Path) -> "Scenario":
@@ -156,7 +167,11 @@ class Scenario(BaseModel):
             description="This is an almost empty scenario file",
             authors=["Max Mustermann"],
             nodes=Nodes.init_example(),
-            start_node="start"
+            start_node="start",
+            invalid_number_audio=Path("invalid-number.wav"),
+            invalid_number_fun_audio=None,
+            internal_error_audio=Path("error.wav"),
+            end_call_audio=Path("end-call.wav"),
         )
     
     @classmethod

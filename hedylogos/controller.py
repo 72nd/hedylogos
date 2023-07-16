@@ -80,36 +80,15 @@ class Controller(Thread):
         while True:
             command = self.__queue.get()
             if command.action is _Action.PICK_UP:
-                self.__current_node = self.__scenario.start()
-                self.__player = Player(
-                    self.__resolve_path(self.__current_node.audio),
-                    self.__queue
-                )
-                self.__player.start()
+                self.__on_pick_up()
             elif command.action is _Action.HANG_UP:
-                self.__current_node = None
-                if self.__player:
-                    self.__player.stop()
+                self.__on_hang_up()
             elif command.action is _Action.DIAL:
-                if not self.__current_node:
-                    continue
-                target = self.__current_node.next_node_id_by_number(command.number)
-                if not target:
-                    print("invalid number, TODO: implement handling")
-                    continue
-                if self.__player:
-                    self.__player.stop()
-                self.__current_node = self.__scenario.get_nodes_dict()[target]
-                self.__player = Player(
-                    self.__resolve_path(self.__current_node.audio),
-                    self.__queue
-                )
-                self.__player.start()
+                self.__on_dial(command)
             elif command.action is _Action.PLAYBACK_ENDED:
-                print("ended by itself")
+                self.__on_playback_ended()
             elif command.action is _Action.QUIT:
-                if self.__player:
-                    self.__player.stop()
+                self.__on_quit()
                 break
         
     def check_paths(self):
@@ -120,6 +99,44 @@ class Controller(Thread):
                 errors_present = True
         if not errors_present:
             print("All paths are valid.")
+    
+    def __on_pick_up(self):
+        self.__current_node = self.__scenario.start()
+        self.__player = Player(
+            self.__resolve_path(self.__current_node.audio),
+            self.__queue
+        )
+        self.__player.start()
+
+    def __on_hang_up(self):
+        self.__current_node = None
+        if self.__player:
+            self.__player.stop()
+
+    def __on_dial(self, command: _Command):
+        if not self.__current_node:
+            return
+        if not command.number:
+            raise RuntimeError("__on_dial called without a number")
+        target = self.__current_node.next_node_id_by_number(command.number)
+        if not target:
+            print("invalid number, TODO: implement handling")
+            return
+        if self.__player:
+            self.__player.stop()
+        self.__current_node = self.__scenario.get_nodes_dict()[target]
+        self.__player = Player(
+            self.__resolve_path(self.__current_node.audio),
+            self.__queue
+        )
+        self.__player.start()
+
+    def __on_playback_ended(self):
+        print("ended by itself")
+
+    def __on_quit(self):
+        if self.__player:
+            self.__player.stop()
     
     def __resolve_path(self, path: Path):
         """Used to resolve paths relative to the scenario file."""
