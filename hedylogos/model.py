@@ -1,4 +1,5 @@
 from collections import Counter
+from dataclasses import field
 import json
 from pathlib import Path
 
@@ -59,6 +60,18 @@ class Node(BaseModel):
             audio=Path("another.mp3"),
             links=None,
         )
+
+    @field_validator("links")
+    def check_only_one_link_type(cls, v):
+        if len(v) <= 1:
+            return v
+        is_none = False
+        if v[0].number is None:
+            is_none = False
+        for link in v:
+            if link.number is None and not is_none:
+                raise ValueError("mixed use of links using numbers and None in the same node")
+        return v
 
     def next_node_id_by_number(self, number: int) -> Optional[str]:
         """Returns the id of a linked node if the number is valid."""
