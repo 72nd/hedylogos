@@ -166,12 +166,12 @@ class Scenario(BaseModel):
             name="A interactive Scenario",
             description="This is an almost empty scenario file",
             authors=["Max Mustermann"],
-            nodes=Nodes.init_example(),
             start_node="start",
             invalid_number_audio=Path("invalid-number.wav"),
             invalid_number_fun_audio=None,
             internal_error_audio=Path("error.wav"),
             end_call_audio=Path("end-call.wav"),
+            nodes=Nodes.init_example(),
         )
     
     @classmethod

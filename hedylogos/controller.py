@@ -93,9 +93,18 @@ class Controller(Thread):
         
     def check_paths(self):
         errors_present: bool = False
-        for node in self.__scenario.nodes.root:
-            if not self.__resolve_path(node.audio).exists():
-                print(f"{self.__resolve_path(node.audio)} not found")
+        paths: list[Path] = [
+            self.__scenario.invalid_number_audio,
+            self.__scenario.internal_error_audio,
+            self.__scenario.end_call_audio,
+        ]
+        if self.__scenario.invalid_number_fun_audio:
+            paths.append(self.__scenario.invalid_number_fun_audio)
+        paths.extend([node.audio for node in self.__scenario.nodes.root])
+        for path in paths:
+            absolute_path = self.__resolve_path(path)
+            if not absolute_path.exists():
+                print(f"{absolute_path} not found")
                 errors_present = True
         if not errors_present:
             print("All paths are valid.")
