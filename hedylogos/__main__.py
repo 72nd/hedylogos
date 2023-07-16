@@ -10,6 +10,19 @@ import typer
 
 app = typer.Typer()
 
+
+@app.command()
+def check(
+    path: Annotated[Path, typer.Argument(help="output path")]
+):
+    """
+    Checks if all audio files in the scenario can be found
+    """
+    scenario = Scenario.from_json(path)
+    controller = Controller(scenario, path)
+    controller.check_paths()
+
+
 @app.command()
 def init(
     path: Annotated[Path, typer.Argument(help="output path")]

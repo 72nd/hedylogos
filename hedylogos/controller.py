@@ -56,7 +56,6 @@ class Controller(Thread):
         super().__init__()
         self.__scenario = scenario
         self.__scenario_location = scenario_path.resolve().parent
-        print(self.__scenario_location)
         self.__queue: queue.Queue = queue.Queue()
         self.__player: Optional[Player] = None
         self.__current_node: Optional[Node] = None
@@ -112,6 +111,15 @@ class Controller(Thread):
                 if self.__player:
                     self.__player.stop()
                 break
+        
+    def check_paths(self):
+        errors_present: bool = False
+        for node in self.__scenario.nodes.root:
+            if not self.__resolve_path(node.audio).exists():
+                print(f"{self.__resolve_path(node.audio)} not found")
+                errors_present = True
+        if not errors_present:
+            print("All paths are valid.")
     
     def __resolve_path(self, path: Path):
         """Used to resolve paths relative to the scenario file."""
