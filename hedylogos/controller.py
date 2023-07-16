@@ -3,6 +3,7 @@ from .model import Node, Scenario
 from enum import Enum
 import queue
 from pathlib import Path
+import random
 from threading import Thread
 from typing import Optional
 
@@ -59,6 +60,7 @@ class Controller(Thread):
         self.__queue: queue.Queue = queue.Queue()
         self.__player: Optional[Player] = None
         self.__current_node: Optional[Node] = None
+        self.__plays_invalid_audio: bool = False
     
     def pick_up(self):
         """Someone picked up the phone."""
@@ -111,11 +113,7 @@ class Controller(Thread):
     
     def __on_pick_up(self):
         self.__current_node = self.__scenario.start()
-        self.__player = Player(
-            self.__resolve_path(self.__current_node.audio),
-            self.__queue
-        )
-        self.__player.start()
+        self.__start_playback(self.__current_node.audio)
 
     def __on_hang_up(self):
         self.__current_node = None
@@ -129,23 +127,38 @@ class Controller(Thread):
             raise RuntimeError("__on_dial called without a number")
         target = self.__current_node.next_node_id_by_number(command.number)
         if not target:
-            print("invalid number, TODO: implement handling")
+            self.__on_invalid_number()
             return
         if self.__player:
             self.__player.stop()
         self.__current_node = self.__scenario.get_nodes_dict()[target]
-        self.__player = Player(
-            self.__resolve_path(self.__current_node.audio),
-            self.__queue
-        )
-        self.__player.start()
+        self.__start_playback(self.__current_node.audio)
+    
+    def __on_invalid_number(self):
+        if self.__player:
+            self.__player.stop()
+        path = self.__scenario.invalid_number_audio
+        if self.__scenario.invalid_number_fun_audio and random.randint(1, 4) == 1:
+            path = self.__scenario.invalid_number_fun_audio
+        self.__start_playback(path)
+        self.__plays_invalid_audio = True
 
     def __on_playback_ended(self):
+        if self.__plays_invalid_audio and self.__current_node:
+            self.__start_playback(self.__current_node.audio)
+            self.__plays_invalid_audio = False
         print("ended by itself")
 
     def __on_quit(self):
         if self.__player:
             self.__player.stop()
+    
+    def __start_playback(self, path: Path):
+        self.__player = Player(
+            self.__resolve_path(path),
+            self.__queue,
+        )
+        self.__player.start()
     
     def __resolve_path(self, path: Path):
         """Used to resolve paths relative to the scenario file."""
