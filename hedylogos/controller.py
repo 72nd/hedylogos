@@ -3,7 +3,6 @@ from .model import Node, Scenario
 from enum import Enum
 import queue
 from pathlib import Path
-import random
 from threading import Thread
 from typing import Optional
 
@@ -53,6 +52,15 @@ class Controller(Thread):
     The controller handles the playback of the audio files and reacts to events
     with the phone.
     """
+
+    PLAY_NORMAL_MESSAGE = 2
+    """
+    How many times should the normal normal invalid number audio be played before
+    the fun message is played (if available). THus if PLAY_FUN_MESSAGE is set to
+    3 the »normal message« will be played the first three occurrence and on the
+    fourth time the fun message will be played.
+    """
+
     def __init__(self, scenario: Scenario, scenario_path: Path):
         super().__init__()
         self.__scenario = scenario
@@ -61,6 +69,7 @@ class Controller(Thread):
         self.__player: Optional[Player] = None
         self.__current_node: Optional[Node] = None
         self.__plays_invalid_audio: bool = False
+        self.__played_normal_invalid_audio: int = 0
     
     def pick_up(self):
         """Someone picked up the phone."""
@@ -138,8 +147,14 @@ class Controller(Thread):
         if self.__player:
             self.__player.stop()
         path = self.__scenario.invalid_number_audio
-        if self.__scenario.invalid_number_fun_audio and random.randint(1, 4) == 1:
-            path = self.__scenario.invalid_number_fun_audio
+        # See documentation of `Controller.PLAY_NORMAL_MESSAGE` for more
+        # Information about this. Why? Because it's fun, that's why.
+        if self.__scenario.invalid_number_fun_audio:
+            if self.__played_normal_invalid_audio == Controller.PLAY_NORMAL_MESSAGE:
+                path = self.__scenario.invalid_number_fun_audio
+                self.__played_normal_invalid_audio = 0
+            else:
+                self.__played_normal_invalid_audio += 1
         self.__start_playback(path)
         self.__plays_invalid_audio = True
 
