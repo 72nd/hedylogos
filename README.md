@@ -4,7 +4,7 @@
     <br>
     hedylogos
     <br>
-    Interactive audio scenarios
+    <small>Interactive audio scenarios</small>
   </h1>
 </div>
 
