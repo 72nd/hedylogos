@@ -19,7 +19,7 @@ Hedylogos was created for the []
 ## ToDo Documentation
 
 - Link auf Deutsche Version
-- Link auf Website
+- Link auf [Editor](https://72nd.github.io/hedylogos/editor/)
 - Installation
 - Editor
 - Benutzung

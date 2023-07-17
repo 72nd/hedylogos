@@ -24,6 +24,15 @@
         href="https://json-editor.github.io/json-editor/form-submission.html">this example</a>. To learn more about
       Hedylogos see our <a href="https://github.com/72nd/hedylogos">GitHub Repository</a>.
     </p>
+    <h3>Bestehende Datei bearbeiten / Edit existing file</h3>
+
+    <div class="mb-3">
+      <label for="formFile" class="form-label">Öffne eine bestehende Szenariodatei um sie zu bearbeiten. Open an
+        existing Scenario-File to edit.</label>
+      <input class="form-control" type="file" id="file_input">
+      <button class="btn btn-primary mt-3" onclick="upload()">Laden/Load</button>
+    </div>
+
     <div class="form-group"></div>
     <form action="/docs/form-submission.html" method="get">
       <input id="input" type="hidden" name="json">
@@ -293,6 +302,18 @@
       document.querySelector('#input').value = JSON.stringify(editor.getValue())
     })
     */
+
+    function upload() {
+      const file_input = document.getElementById("file_input");
+      if (!("files" in file_input) || file_input.files.length == 0) {
+        return
+      }
+      var reader = new FileReader();
+      reader.onload = function(event) {
+        editor.setValue(JSON.parse(event.target.result));
+      }
+      const content = reader.readAsText(file_input.files[0])
+    }
 
     function copy() {
       const errors = editor.validate();
