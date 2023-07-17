@@ -5,8 +5,10 @@
     hedylogos
   </h1>
   <h2>Build interactive audio scenarios using old dial phones or numeric keyboards</h2>
-  <p><a href="README-de.md">Deutsche Version</a></p>
+  <!-- <p><a href="README-de.md">Deutsche Version</a></p> -->
 </div>
+
+_The English Version of this README should be available in August._
 
 Mit Hedylogos ist es möglich, interaktive Audioformate zu entwickeln. Die Navigatio zwischen den einzelnen Audiosschnipsel erfolgt über die Eingabe/das Wählen von Nummern, wie das etwa auch bei Menüs von Telefonhotlines bekannt ist. Die Software unterstützt hierfür zwei unterschiedliche Modi für die Nutzenden: Zum einen kann altes Wählscheibentelefon (nach einem kleinen Umbau) dafür verwendet werden oder die Software kann mithilfe eines [Ziffernblocks](https://de.wikipedia.org/wiki/Ziffernblock) gesteuert werden. Die Erstellung der Audioszenarios ist verhältnismäßig einfach und kann sowohl in einem grafischen Editor als auch per Texteditor erfolgen (mehr dazu unten). Es sind sowohl inhaltlich als auch von der Nutzung her viele unterschiedliche Szenarien denkbar, wie interaktive Geschichten oder als Player in einem Museum, welcher je nach Knopfdruck unterschiedliche Informationen abspielt.
 
@@ -91,3 +93,4 @@ Die Ausführung kann mit folgenden Tasten gesteuert werden:
 ### Mit einem Wählscheibentelefon
 
 TODO.
+
