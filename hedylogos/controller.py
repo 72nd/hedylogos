@@ -121,6 +121,8 @@ class Controller(Thread):
             print("All paths are valid.")
     
     def __on_pick_up(self):
+        if self.__player:
+            self.__player.stop()
         self.__current_node = self.__scenario.start()
         self.__start_playback(self.__current_node.audio)
 
