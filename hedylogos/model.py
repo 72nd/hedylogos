@@ -15,10 +15,17 @@ def format_str_list(data: list[str]):
 class Link(BaseModel):
     """Used to define next nodes in a scenario."""
 
-    target: str = Field(examples=["node_id"])
-    """Id of the node which the link should point to."""
-    number: Optional[int] = Field(ge=0, le=9, examples=[0])
-    """A number between 0 and 9 for the user to be able to choose the link."""
+    target: str = Field(
+        examples=["node_id"],
+        description="Id of the node which the link should point to.",
+        min_length=1
+    )
+    number: Optional[int] = Field(
+        ge=0,
+        le=9,
+        examples=[0],
+        description="A number between 0 and 9 for the user to be able to choose the link. If set to null a random link will be chosen."
+    )
 
 
 class Node(BaseModel):
@@ -26,18 +33,29 @@ class Node(BaseModel):
     A node represents a state within the graph and contains a audio.
     """
 
-    id: str = Field(examples=["node_id"])
-    """
-    Unique identifier of the node. Used to refer to the node in other parts of the scenario.
-    """
-    name: str = Field(examples=["A node"])
-    """Name of the node for debugging purposes."""
-    content: Optional[str]
-    """Optional the textual content of the audio in the node."""
-    audio: Path
-    """Path to the audio file."""
-    links: Optional[list[Link]]
-    """Links to other nodes next in the story/scenario line."""
+    id: str = Field(
+        examples=["node_id"],
+        description="Unique identifier of the node. Used to refer to the node in other parts of the scenario.",
+        min_length=1
+    )
+    name: str = Field(
+        examples=["A node"],
+        description="Name of the node for debugging purposes.",
+        min_length=1
+    )
+    content: Optional[str] = Field(
+        description="Optional the textual content of the audio in the node.",
+        json_schema_extra={
+            "format": "textarea",
+        }
+    )
+    audio: Path = Field(
+        description="Path to the audio file. Can be relative to the location of the scenario file.",
+        min_length=1
+    )
+    links: Optional[list[Link]] = Field(
+        description="Links to other nodes next in the story/scenario line. If set to None the scenario will stop at this point."
+    )
 
     @classmethod
     def start_example(cls) -> "Node":
@@ -144,26 +162,42 @@ class Scenario(BaseModel):
     It contains all metadata and steps within the story.
     """
 
-    name: str = Field(examples=["The story of the hotline"])
-    """The name of the scenario."""
-    description: Optional[str] = Field(examples=["Some information about the scenario"])
-    """Gives some information about the scenario defined by the graph."""
-    authors: list[str]
-    """A list of the names."""
-    nodes: Nodes
-    """All nodes of the scenario."""
-    start_node: str
-    """Id of the node the execution should start."""
-    invalid_number_audio: Path
-    """Audio played when the user dials an invalid number."""
-    invalid_number_fun_audio: Optional[Path]
-    """
-    Optional fun audio played when the user dials an invalid number. Played by 25% chance.
-    """
-    internal_error_audio: Path
-    """Audio played when an internal error occurred."""
-    end_call_audio: Path
-    """Audio played when scenario ends."""
+    name: str = Field(
+        examples=["The story of the hotline"],
+        description="The name of the scenario.",
+        min_length=1,
+    )
+    description: Optional[str] = Field(
+        examples=["Some information about the scenario"],
+        description="Gives some information about the scenario defined by the graph."
+    )
+    authors: list[str] = Field(
+        description="A list of the names.",
+        min_length=1,
+    )
+    nodes: Nodes = Field(
+        description="All nodes of the scenario."
+    )
+    start_node: str = Field(
+        description="Id of the node the execution should start.",
+        min_length=1,
+    )
+    invalid_number_audio: Path = Field(
+        description="Audio played when the user dials an invalid number.",
+        min_length=1,
+    )
+    invalid_number_fun_audio: Optional[Path] = Field(
+        description="Optional fun audio played some times when the user dials an invalid number. ",
+        min_length=1,
+    )
+    internal_error_audio: Path = Field(
+        description="Audio played when an internal error occurred.",
+        min_length=1,
+    )
+    end_call_audio: Path = Field(
+        description="Audio played when scenario ends.",
+        min_length=1,
+    )
     nodes_dict: Optional[dict[str, Node]] = Field(exclude=True, default=None)
     """The id of the node which the scenario should start with."""
 

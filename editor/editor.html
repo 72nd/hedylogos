@@ -5,8 +5,8 @@
   <meta charset="utf-8" />
   <title>Hedylogos Szenario Editor</title>
   <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">-->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
 
 <body>
@@ -14,11 +14,15 @@
     <h1>Hedylogos Szenario Editor</h1>
     <p>
       Mit diesem Editor kannst du einfach audio Szenarios für Hedylogos erstellen. Dieser Editor basiert auf dem <a
-        href="https://github.com/json-editor/json-editor">JSON Editor</a> und <a href="https://json-editor.github.io/json-editor/form-submission.html">diesem Beispiel</a>. Mehr über Hedylogos kannst du <a href="https://github.com/72nd/hedylogos">hier</a> erfahren.
+        href="https://github.com/json-editor/json-editor">JSON Editor</a> und <a
+        href="https://json-editor.github.io/json-editor/form-submission.html">diesem Beispiel</a>. Mehr über Hedylogos
+      kannst du <a href="https://github.com/72nd/hedylogos">hier</a> erfahren.
     </p>
     <p>
       With this editor you can easily create audio scenarios for Hedylogos. This editor is based on the <a
-        href="https://github.com/json-editor/json-editor">JSON Editor</a> and <a href="https://json-editor.github.io/json-editor/form-submission.html">this example</a>. To learn more about Hedylogos see our <a href="https://github.com/72nd/hedylogos">GitHub Repository</a>.
+        href="https://github.com/json-editor/json-editor">JSON Editor</a> and <a
+        href="https://json-editor.github.io/json-editor/form-submission.html">this example</a>. To learn more about
+      Hedylogos see our <a href="https://github.com/72nd/hedylogos">GitHub Repository</a>.
     </p>
     <div class="form-group"></div>
     <form action="/docs/form-submission.html" method="get">
@@ -45,15 +49,18 @@
       disable_edit_json: false,
       disable_properties: true,
       disable_collapse: true,
+      show_errors: "always",
       schema: {
         "$defs": {
           "Link": {
             "description": "Used to define next nodes in a scenario.",
             "properties": {
               "target": {
+                "description": "Id of the node which the link should point to.",
                 "examples": [
                   "node_id"
                 ],
+                "minLength": 1,
                 "title": "Target",
                 "type": "string"
               },
@@ -68,6 +75,7 @@
                     "type": "null"
                   }
                 ],
+                "description": "A number between 0 and 9 for the user to be able to choose the link. If set to null a random link will be chosen.",
                 "examples": [
                   0
                 ],
@@ -85,16 +93,20 @@
             "description": "\n    A node represents a state within the graph and contains a audio.\n    ",
             "properties": {
               "id": {
+                "description": "Unique identifier of the node. Used to refer to the node in other parts of the scenario.",
                 "examples": [
                   "node_id"
                 ],
+                "minLength": 1,
                 "title": "Id",
                 "type": "string"
               },
               "name": {
+                "description": "Name of the node for debugging purposes.",
                 "examples": [
                   "A node"
                 ],
+                "minLength": 1,
                 "title": "Name",
                 "type": "string"
               },
@@ -107,10 +119,14 @@
                     "type": "null"
                   }
                 ],
+                "description": "Optional the textual content of the audio in the node.",
+                "format": "textarea",
                 "title": "Content"
               },
               "audio": {
+                "description": "Path to the audio file. Can be relative to the location of the scenario file.",
                 "format": "path",
+                "minLength": 1,
                 "title": "Audio",
                 "type": "string"
               },
@@ -126,6 +142,7 @@
                     "type": "null"
                   }
                 ],
+                "description": "Links to other nodes next in the story/scenario line. If set to None the scenario will stop at this point.",
                 "title": "Links"
               }
             },
@@ -151,9 +168,11 @@
         "description": "\n    The scenario represents the base data structure of an story scenario.\n    It contains all metadata and steps within the story.\n    ",
         "properties": {
           "name": {
+            "description": "The name of the scenario.",
             "examples": [
               "The story of the hotline"
             ],
+            "minLength": 1,
             "title": "Name",
             "type": "string"
           },
@@ -166,27 +185,39 @@
                 "type": "null"
               }
             ],
+            "description": "Gives some information about the scenario defined by the graph.",
             "examples": [
               "Some information about the scenario"
             ],
             "title": "Description"
           },
           "authors": {
+            "description": "A list of the names.",
             "items": {
               "type": "string"
             },
+            "minItems": 1,
             "title": "Authors",
             "type": "array"
           },
           "nodes": {
-            "$ref": "#/$defs/Nodes"
+            "allOf": [
+              {
+                "$ref": "#/$defs/Nodes"
+              }
+            ],
+            "description": "All nodes of the scenario."
           },
           "start_node": {
+            "description": "Id of the node the execution should start.",
+            "minLength": 1,
             "title": "Start Node",
             "type": "string"
           },
           "invalid_number_audio": {
+            "description": "Audio played when the user dials an invalid number.",
             "format": "path",
+            "minLength": 1,
             "title": "Invalid Number Audio",
             "type": "string"
           },
@@ -200,15 +231,20 @@
                 "type": "null"
               }
             ],
+            "description": "Optional fun audio played some times when the user dials an invalid number. ",
             "title": "Invalid Number Fun Audio"
           },
           "internal_error_audio": {
+            "description": "Audio played when an internal error occurred.",
             "format": "path",
+            "minLength": 1,
             "title": "Internal Error Audio",
             "type": "string"
           },
           "end_call_audio": {
+            "description": "Audio played when scenario ends.",
             "format": "path",
+            "minLength": 1,
             "title": "End Call Audio",
             "type": "string"
           },
@@ -253,6 +289,11 @@
     */
 
     function copy() {
+      const errors = editor.validate();
+      if (errors.length) {
+        alert("There are errors, please fix them before copying the file");
+        return
+      }
       var dummy = document.createElement("textarea");
       document.body.appendChild(dummy);
       dummy.value = JSON.stringify(editor.getValue());
@@ -262,6 +303,11 @@
     }
 
     function download() {
+      const errors = editor.validate();
+      if (errors.length) {
+        alert("There are errors, please fix them before copying the file");
+        return
+      }
       const text = JSON.stringify(editor.getValue());
       var element = document.createElement("a");
       element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
