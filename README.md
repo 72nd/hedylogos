@@ -4,7 +4,7 @@
     <br>
     hedylogos
   </h1>
-  <h2>Interactive audio scenarios</h2>
+  <h2>Interactive audio scenarios for old dial phones and numeric keyboards</h2>
 </div>
 
 
