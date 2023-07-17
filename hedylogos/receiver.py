@@ -13,7 +13,7 @@ class KeyboardReceiver(Thread):
     a simple user facing control panel without the need of setting up a real old dial phone.
     """
 
-    HELP = "P or ENTER: pick up / H or *: hang up / Q: quit / 0-9: dial number / ?: Help"
+    HELP = "P or ENTER: pick up / H: hang up / Q: quit / 0-9: dial number / ?: Help"
 
     def __init__(self, controller: Controller):
         super().__init__()
@@ -32,7 +32,7 @@ class KeyboardReceiver(Thread):
         if selection in ["p", key.ENTER]:
             print("> Pick up phone")
             self.__controller.pick_up()
-        elif selection in ["h", "*"]:
+        elif selection == "h":
             print("> Hang up phone")
             self.__controller.hang_up()
         elif selection == "?":

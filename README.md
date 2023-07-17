@@ -8,7 +8,7 @@
   <p><a href="README-de.md">Deutsche Version</a></p>
 </div>
 
-Mit Hedylogos ist es möglich, interaktive Audioformate (ähnlich zu den Menüs von Telefonhotlines) zu entwickeln. Die Software unterstützt hierfür zwei unterschiedliche Modi für die Nutzenden: Zum einen kann altes Wählscheibentelefon (nach einem kleinen Umbau) dafür verwendet werden oder die Software kann mithilfe eines [Ziffernblocks](https://de.wikipedia.org/wiki/Ziffernblock) gesteuert werden. Die Erstellung der Audioszenarios ist verhältnismäßig einfach und kann sowohl in einem grafischen Editor als auch per Texteditor erfolgen (mehr dazu unten). Es sind sowohl inhaltlich als auch von der Nutzung her viele unterschiedliche Szenarien denkbar. Dieses Seite wird in Folge eine detaillierte Einführung in die Verwendung der Software geben.
+Mit Hedylogos ist es möglich, interaktive Audioformate zu entwickeln. Die Navigatio zwischen den einzelnen Audiosschnipsel erfolgt über die Eingabe/das Wählen von Nummern, wie das etwa auch bei Menüs von Telefonhotlines bekannt ist. Die Software unterstützt hierfür zwei unterschiedliche Modi für die Nutzenden: Zum einen kann altes Wählscheibentelefon (nach einem kleinen Umbau) dafür verwendet werden oder die Software kann mithilfe eines [Ziffernblocks](https://de.wikipedia.org/wiki/Ziffernblock) gesteuert werden. Die Erstellung der Audioszenarios ist verhältnismäßig einfach und kann sowohl in einem grafischen Editor als auch per Texteditor erfolgen (mehr dazu unten). Es sind sowohl inhaltlich als auch von der Nutzung her viele unterschiedliche Szenarien denkbar, wie interaktive Geschichten oder als Player in einem Museum, welcher je nach Knopfdruck unterschiedliche Informationen abspielt.
 
 
 ## Förderung
@@ -29,13 +29,65 @@ Weiter solltest du etwas mit der Bedienung der Kommandozeile vertraut sein. Eine
 
 ## Installation
 
+Lade dir zunächst die [neuste Version](https://github.com/72nd/hedylogos/releases/latest) runter. Entpacke das Archiv und navigiere im Terminal in den Ordner.
+
+```
+python -m venv .venv
+pip install .
+```
+
+Danach kann Hedylogos mit dem Befehl `hedylogos` gestartet werden.
 
 
-## ToDo Documentation
+## Ein Szenario erstellen
 
-- Link auf Deutsche Version
-- Link auf [Editor](https://72nd.github.io/hedylogos/editor/)
-- Installation
-- Editor
-- Benutzung
-- Logo und Nennung Ministerium
+Es gibt zwei Möglichkeiten, ein Szenario für Hedylogos zu erstellen. Zum einen gibt es einen grafischen Editor, zum anderen können fortgeschrittene Nutzer auch die JSON Datei direkt bearbeiten. In Folge werden beide Wege erläutert.
+
+
+### Mit dem Editor
+
+Um das Erstellen der Szenarios möglichst einfach zu gestalten, existiert ein [grafischer Editor](https://72nd.github.io/hedylogos/editor/). Mehr zur Bedienung findest du im Editor selbst. Lade am Ende das Szenario als Datei runter und speichere es auf deinem Computer.
+
+
+### Manuell in der JSON Datei
+
+Wenn dir JSON nicht fremd ist, kannst du das Szenario auch direkt im Editor erstellen. Die Bedeutung der einzelnen Fälle sollten soweit selbsterklärend sein. Sonst lohnt sich ein Blick in den [grafischen Editor](https://72nd.github.io/hedylogos/editor/) und die darin befindlichen Erläuterungen der Felder zu werfen. Die Software bietet auch die Möglichkeit, ein Template der Datei zu generieren.
+
+```
+hedylogos init scenario.json
+```
+
+
+## Die Szenariodatei validieren
+
+Bei der Erstellung größerer Szenarios schleichen sich schnell kleine Fehler und Verschreiber ein. Damit diese nicht erst bei der Benutzung auffallen, sind in Hedylogos Validierungsroutinen eingebaut, welche beim Laden einer Szenariodatei automatisiert die allermeisten Probleme erkennen. Nur die Prüfung, ob alle Audiodateien vorhanden sind, muss manuell mit einem Befehl ausgelöst werden.
+
+```
+hedylogos check pfad/zum/szenario.json
+```
+
+
+## Das Szenario abspielen
+
+Hedylogos bietet zwei unterschiedliche Modi an. Zum einen mit einem alten Wählscheibentelefon oder mit einer Tastatur bzw. [Ziffernblocks](https://de.wikipedia.org/wiki/Ziffernblock).
+
+
+### Mit der Tastatur / Ziffernblock
+
+Die Ausführung wird mit diesem Befehl gestartet.
+
+```
+hedylogos run-keyboard pfad/zum/szenario.json
+```
+
+Die Ausführung kann mit folgenden Tasten gesteuert werden:
+
+- `p` oder `<ENTER>`: Startet das Szenario. Wenn das Szenario bereits wiedergegeben wird, wird die Wiedergabe abgebrochen und startet wieder am Startpunkt.
+- `h`: Stopt die Wiedergabe des Szenarios. Simuliert in erster Linie den Moment, wenn der Telefonhörer aufgelegt wird und hat deshalb für den Tastaturmodus keine wirkliche Bedeutung.
+- `q`: Beendet die Ausführung des Programms. Damit Besucher diese Aktion nicht auslösen können, empfiehlt sich die verwendung eines dezidierten Nummernblocks.
+- `0-9`: Wählen einer Nummern.
+
+
+### Mit einem Wählscheibentelefon
+
+TODO.
