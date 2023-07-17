@@ -3,9 +3,8 @@
     <img src="misc/logo.png" width="120"/>
     <br>
     hedylogos
-    <br>
-    <small>Interactive audio scenarios</small>
   </h1>
+  <h2>Interactive audio scenarios</h2>
 </div>
 
 
