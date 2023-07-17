@@ -171,9 +171,9 @@ class Scenario(BaseModel):
         examples=["Some information about the scenario"],
         description="Gives some information about the scenario defined by the graph."
     )
-    authors: list[str] = Field(
+    authors: Optional[list[str]] = Field(
         description="A list of the names.",
-        min_length=1,
+        default=None,
     )
     nodes: Nodes = Field(
         description="All nodes of the scenario."
