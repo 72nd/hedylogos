@@ -1,10 +1,10 @@
 <div align="center" style="border-bottom: none">
-  <div>
-    <img src="misc/logo.png" width="100"/>
+  <h1>
+    <img src="misc/logo.png" width="120"/>
     <br>
-    <h1>hedylogos</h1>
-  </div>
-  <h2>Interactive audio scenarios for old dial telephones</h2>
+    hedylogos
+  </h1>
+  Interactive audio scenarios
 </div>
 
 
