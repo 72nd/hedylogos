@@ -1,6 +1,6 @@
 from .controller import Controller
 from .model import Scenario
-from .receiver import KeyboardReceiver, MqttReceiver
+from .receiver import DialPhoneReceiver, KeyboardReceiver
 
 from pathlib import Path
 import time
@@ -56,7 +56,7 @@ def run_mqtt(
     """
     scenario = Scenario.from_json(path)
     controller = Controller(scenario, path)
-    receiver = MqttReceiver(controller)
+    receiver = DialPhoneReceiver(controller)
     receiver.run()
 
 
