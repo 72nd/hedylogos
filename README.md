@@ -1,8 +1,13 @@
-# hedylogos – Interactive audio scenarios for old dial telephones
-
-<p align="center">
-  <img src="misc/header.png" />
-</p>
+<h1 align="center" style="border-bottom: none">
+    <div>
+        <a href="https://www.nocodb.com">
+            <img src="misc/logo.png" width="100"/>
+            <br>
+            hedylogos
+        </a>
+    </div>
+    Interactive audio scenarios for old dial telephones
+</h1>
 
 
 Hedylogos allows the creation of interactive audio scenarios using JSON files.
