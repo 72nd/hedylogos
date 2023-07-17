@@ -15,7 +15,7 @@ Mit Hedylogos ist es möglich, interaktive Audioformate (ähnlich zu den Menüs 
 
 Das Projekt wurde gefördert mit Mitteln des Ministeriums für Wissenschaft, Forschung und Kultur des Landes Brandenburg.
 
-![Logo des Ministeriums für Wissenschaft Forschung und Kultur des Landes Brandenburg](misc/mwfk.png)
+<img alt="Logo des Ministeriums für Wissenschaft Forschung und Kultur des Landes Brandenburg" href="misc/mwfk.png" width="200" style="align:left"/>
 
 
 ## Installation
