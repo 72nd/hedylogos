@@ -41,6 +41,15 @@ pip install .
 Danach kann Hedylogos mit dem Befehl `hedylogos` gestartet werden.
 
 
+## Beispiel
+
+Im Ordner `example` findet sich ein Beispielszenario, welches die wichtigsten Funktionen und Eigenschaften von Hedylogos abdeckt. Um das Beispiel zu starten, kann folgender Befehl verwendet werden.
+
+```
+hedylogos run-keyboard example/scenario.json
+```
+
+
 ## Ein Szenario erstellen
 
 Es gibt zwei Möglichkeiten, ein Szenario für Hedylogos zu erstellen. Zum einen gibt es einen grafischen Editor, zum anderen können fortgeschrittene Nutzer auch die JSON Datei direkt bearbeiten. In Folge werden beide Wege erläutert.
@@ -67,7 +76,6 @@ Bei der Erstellung größerer Szenarios schleichen sich schnell kleine Fehler un
 ```
 hedylogos check pfad/zum/szenario.json
 ```
-
 
 ## Das Szenario abspielen
 
