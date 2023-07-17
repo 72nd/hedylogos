@@ -104,7 +104,7 @@ class Controller(Thread):
         
     def check_paths(self):
         errors_present: bool = False
-        paths: list[Path] = [
+        paths: list[str] = [
             self.__scenario.invalid_number_audio,
             self.__scenario.internal_error_audio,
             self.__scenario.end_call_audio,
@@ -181,13 +181,13 @@ class Controller(Thread):
         if self.__player:
             self.__player.stop()
     
-    def __start_playback(self, path: Path):
+    def __start_playback(self, path: str):
         self.__player = Player(
             self.__resolve_path(path),
             self.__queue,
         )
         self.__player.start()
     
-    def __resolve_path(self, path: Path):
+    def __resolve_path(self, path: str):
         """Used to resolve paths relative to the scenario file."""
-        return (self.__scenario_location / path).resolve()
+        return (self.__scenario_location / Path(path)).resolve()

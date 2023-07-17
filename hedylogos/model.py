@@ -49,7 +49,7 @@ class Node(BaseModel):
             "format": "textarea",
         }
     )
-    audio: Path = Field(
+    audio: str = Field(
         description="Path to the audio file. Can be relative to the location of the scenario file.",
         min_length=1
     )
@@ -63,7 +63,7 @@ class Node(BaseModel):
             id="start",
             name="Start Node",
             content=None,
-            audio=Path("start.mp3"),
+            audio="start.mp3",
             links=[Link(
                 target="start",
                 number=1,
@@ -76,7 +76,7 @@ class Node(BaseModel):
             id="another",
             name="Another node",
             content="Hello this is the content text",
-            audio=Path("another.mp3"),
+            audio="another.mp3",
             links=None,
         )
 
@@ -182,19 +182,19 @@ class Scenario(BaseModel):
         description="Id of the node the execution should start.",
         min_length=1,
     )
-    invalid_number_audio: Path = Field(
+    invalid_number_audio: str = Field(
         description="Audio played when the user dials an invalid number.",
         min_length=1,
     )
-    invalid_number_fun_audio: Optional[Path] = Field(
+    invalid_number_fun_audio: Optional[str] = Field(
         description="Optional fun audio played some times when the user dials an invalid number. ",
         min_length=1,
     )
-    internal_error_audio: Path = Field(
+    internal_error_audio: str = Field(
         description="Audio played when an internal error occurred.",
         min_length=1,
     )
-    end_call_audio: Path = Field(
+    end_call_audio: str = Field(
         description="Audio played when scenario ends.",
         min_length=1,
     )
@@ -215,10 +215,10 @@ class Scenario(BaseModel):
             description="This is an almost empty scenario file",
             authors=["Max Mustermann"],
             start_node="start",
-            invalid_number_audio=Path("invalid-number.wav"),
+            invalid_number_audio="invalid-number.wav",
             invalid_number_fun_audio=None,
-            internal_error_audio=Path("error.wav"),
-            end_call_audio=Path("end-call.wav"),
+            internal_error_audio="error.wav",
+            end_call_audio="end-call.wav",
             nodes=Nodes.init_example(),
         )
     
