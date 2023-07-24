@@ -8,6 +8,7 @@ dynamic = ["version"]
 dependencies = [
     "pydantic",
     "readchar",
+    "rotarypi",
     "simpleaudio",
     "typer", 
 ]

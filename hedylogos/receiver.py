@@ -1,9 +1,12 @@
-from typing import Optional
+import queue
 from .controller import Controller
 
+import logging
+from queue import Queue
 from threading import Thread
 
 from readchar import readkey, key
+from rotarypi import DialEvent, DialConfiguration, DialPinout, RotaryReader
 
 
 class KeyboardReceiver(Thread):
@@ -52,3 +55,15 @@ class DialPhoneReceiver(Thread):
     def __init__(self, controller: Controller):
         super().__init__()
         self.__controller: Controller = controller
+        self.__queue: Queue[DialEvent] = Queue()
+        self.__reader: RotaryReader = RotaryReader(
+            self.__queue,
+            DialPinout(),
+            DialConfiguration(loglevel=logging.DEBUG),
+        )
+    
+    def run(self):
+        self.__reader.start()
+        while True:
+            dialed: DialEvent = self.__queue.get()
+            print(dialed)
