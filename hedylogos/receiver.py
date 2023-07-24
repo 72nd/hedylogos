@@ -64,6 +64,7 @@ class DialPhoneReceiver(Thread):
     
     def run(self):
         self.__reader.start()
+        self.__controller.start()
         while True:
             self.__on_event(self.__queue.get())
             
