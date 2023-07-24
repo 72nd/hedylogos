@@ -75,9 +75,6 @@ class DialPhoneReceiver(Thread):
             print(f"> Dial number {event.data}")
             self.__controller.dial(event.data)
         if event.type == EventType.HANDSET_EVENT:
-            if not isinstance(event.data, DialEvent):
-                print("Logic error: got HANDSET_EVENT with number as data")
-                return
             if event.data is HandsetState.PICKED_UP:
                 self.__controller.pick_up()
             elif event.data is HandsetState.HUNG_UP:
