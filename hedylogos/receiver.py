@@ -76,6 +76,8 @@ class DialPhoneReceiver(Thread):
             self.__controller.dial(event.data)
         if event.type == EventType.HANDSET_EVENT:
             if event.data is HandsetState.PICKED_UP:
+                print("> Pick up phone")
                 self.__controller.pick_up()
             elif event.data is HandsetState.HUNG_UP:
+                print("> Hang up phone")
                 self.__controller.hang_up()
