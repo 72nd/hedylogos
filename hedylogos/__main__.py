@@ -48,11 +48,11 @@ def run_keyboard(
 
 
 @app.command()
-def run_mqtt(
+def run_phone(
     path: Annotated[Path, typer.Argument(help="path to scenario file")]
 ):
     """
-    Runs the scenario using the input form the dial via the MQTT server.
+    Runs the scenario using input form a dial phone using rotarypi.
     """
     scenario = Scenario.from_json(path)
     controller = Controller(scenario, path)
