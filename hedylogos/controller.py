@@ -135,7 +135,7 @@ class Controller(Thread):
         if not self.__current_node:
             return
         if command.number is None or isinstance(command.number, int):
-            raise RuntimeError("__on_dial called without a number")
+            raise RuntimeError(f"__on_dial called without a number, type of command.number {type(command.number)}")
         target = self.__current_node.next_node_id_by_number(command.number)
         if not target:
             self.__on_invalid_number()
