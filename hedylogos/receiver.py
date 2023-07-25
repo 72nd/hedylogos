@@ -6,7 +6,11 @@ from queue import Queue
 from threading import Thread
 
 from readchar import readkey, key
+
 from rotarypi import DialEvent, DialConfiguration, DialPinout, EventType, HandsetState, RotaryReader
+
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 class KeyboardReceiver(Thread):
@@ -69,13 +73,16 @@ class DialPhoneReceiver(Thread):
             self.__on_event(self.__queue.get())
             
     def __on_event(self, event: DialEvent):
+        logging.debug("new dial event received")
         if event.type == EventType.DIAL_EVENT:
+            logging.debug("event parsed as EventType.DIAL_EVENT")
             if not isinstance(event.data, int):
                 print("Logic error: got DIAL_EVENT with HandsetData as data")
                 return
             print(f"> Dial number {event.data}")
             self.__controller.dial(event.data)
         if event.type == EventType.HANDSET_EVENT:
+            logging.debug("event parsed as EventType.HANDSET_EVENT")
             if event.data is HandsetState.PICKED_UP:
                 print("> Pick up phone")
                 self.__controller.pick_up()
