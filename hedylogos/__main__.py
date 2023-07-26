@@ -1,9 +1,11 @@
 from .controller import Controller
 from .model import Scenario
-from .receiver import DialPhoneReceiver, KeyboardReceiver
+from .receiver import KeyboardReceiver
 
 from pathlib import Path
-import time
+if Path("/etc/rpi-issue").exists():
+    from .receiver import DialPhoneReceiver
+
 from typing_extensions import Annotated
 
 import typer

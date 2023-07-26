@@ -2,12 +2,11 @@ import queue
 from .controller import Controller
 
 import logging
+from pathlib import Path
 from queue import Queue
 from threading import Thread
 
 from readchar import readkey, key
-
-from rotarypi import DialEvent, DialConfiguration, DialPinout, EventType, HandsetState, RotaryReader
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -55,37 +54,41 @@ class KeyboardReceiver(Thread):
             print("> Invalid command, type ? for help")
 
 
-class DialPhoneReceiver(Thread):
-    def __init__(self, controller: Controller):
-        super().__init__()
-        self.__controller: Controller = controller
-        self.__queue: Queue[DialEvent] = Queue()
-        self.__reader: RotaryReader = RotaryReader(
-            self.__queue,
-            DialPinout(),
-            DialConfiguration(loglevel=logging.DEBUG),
-        )
-    
-    def run(self):
-        self.__reader.start()
-        self.__controller.start()
-        while True:
-            self.__on_event(self.__queue.get())
-            
-    def __on_event(self, event: DialEvent):
-        logging.debug("new dial event received")
-        if event.type == EventType.DIAL_EVENT:
-            logging.debug("event parsed as EventType.DIAL_EVENT")
-            if not isinstance(event.data, int):
-                print("Logic error: got DIAL_EVENT with HandsetData as data")
-                return
-            print(f"> Dial number {event.data}")
-            self.__controller.dial(event.data)
-        if event.type == EventType.HANDSET_EVENT:
-            logging.debug("event parsed as EventType.HANDSET_EVENT")
-            if event.data is HandsetState.PICKED_UP:
-                print("> Pick up phone")
-                self.__controller.pick_up()
-            elif event.data is HandsetState.HUNG_UP:
-                print("> Hang up phone")
-                self.__controller.hang_up()
+if Path("/etc/rpi-issue").exists():
+    from rotarypi import DialEvent, DialConfiguration, DialPinout, EventType, HandsetState, RotaryReader
+
+
+    class DialPhoneReceiver(Thread):
+        def __init__(self, controller: Controller):
+            super().__init__()
+            self.__controller: Controller = controller
+            self.__queue: Queue[DialEvent] = Queue()
+            self.__reader: RotaryReader = RotaryReader(
+                self.__queue,
+                DialPinout(),
+                DialConfiguration(loglevel=logging.DEBUG),
+            )
+        
+        def run(self):
+            self.__reader.start()
+            self.__controller.start()
+            while True:
+                self.__on_event(self.__queue.get())
+                
+        def __on_event(self, event: DialEvent):
+            logging.debug("new dial event received")
+            if event.type == EventType.DIAL_EVENT:
+                logging.debug("event parsed as EventType.DIAL_EVENT")
+                if not isinstance(event.data, int):
+                    print("Logic error: got DIAL_EVENT with HandsetData as data")
+                    return
+                print(f"> Dial number {event.data}")
+                self.__controller.dial(event.data)
+            if event.type == EventType.HANDSET_EVENT:
+                logging.debug("event parsed as EventType.HANDSET_EVENT")
+                if event.data is HandsetState.PICKED_UP:
+                    print("> Pick up phone")
+                    self.__controller.pick_up()
+                elif event.data is HandsetState.HUNG_UP:
+                    print("> Hang up phone")
+                    self.__controller.hang_up()
