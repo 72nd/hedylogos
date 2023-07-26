@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Hedylogos Editor 2.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="css/bulma.min.css" rel="stylesheet" />
+    <link href="css/fontawesome.min.css" rel="stylesheet" />
+    <script defer src="js/alpine.min.js"></script>
+    <script src="js/jsplumb.browser-ui.umd.js"></script>
+</head>
+
+<body x-data="data()">
+    <nav class="navbar is-primary">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="#">
+                <img src="logo.svg" alt="Hedylogos Editor" width="112" height="28">
+            </a>
+            <div class="navbar-burger" data-target="navbar">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+        <div id="navbar" class="navbar-menu">
+            <div class="navbar-start">
+                <a class="navbar-item" @click="new_document()">
+                    <span class="icon-text">
+                        <span class="icon">
+                            <i class="fas fa-file"></i>
+                        </span>
+                        <span>New</span>
+                    </span>
+                </a>
+                <label class="navbar-item" @change="open_document()">
+                    <span class="icon-text">
+                        <span class="icon">
+                            <i class="fas fa-upload"></i>
+                        </span>
+                        <span>Open</span>
+                    </span>
+                    <input type="file" id="file_input" style="position: fixed; top: -100%">
+                </label>
+                <a class="navbar-item" @click="save_document()">
+                    <span class="icon-text">
+                        <span class="icon">
+                            <i class="fas fa-download"></i>
+                        </span>
+                        <span>Save</span>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <div class="container">
+            <section class="section">
+                <h3 class="title">Scenario Settings</h2>
+                    <div class="columns is-desktop">
+                        <div class="column">
+                            <div class="field">
+                                <label class="label" for="scenario_name">Name</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" id="scenario_name" type="text" x-model="name">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-pen"></i>
+                                    </span>
+                                </div>
+                                <p class="help">The name of the scenario</p>
+                            </div>
+                            <div class="field">
+                                <label class="label" for="scenario_start_node">Start Node</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" id="scenario_start_node" type="text" x-model="start_node">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-star"></i>
+                                    </span>
+                                </div>
+                                <p class="help">Id of the node the execution should start</p>
+                            </div>
+                            <div class="field">
+                                <label class="label" for="scenario_invalid_audio">Invalid Number Audio</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" id="scenario_invalid_number_audio" type="text"
+                                        x-model="invalid_number_audio">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-file-audio"></i>
+                                    </span>
+                                </div>
+                                <p class="help">Audio played when the user dials an invalid number.</p>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <label class="label" for="scenario_invalid_fun_audio">Invalid Number Audio Fun</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" id="scenario_invalid_fun_audio" type="text"
+                                        x-model="invalid_number_fun_audio">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-file-audio"></i>
+                                    </span>
+                                </div>
+                                <p class="help">Optional fun audio played some times when the user dials an invalid
+                                    number.</p>
+                            </div>
+                            <div class="field">
+                                <label class="label" for="scenario_internal_error_audio">Internal Error Audio</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" id="scenario_internal_error_audio" type="text"
+                                        x-model="internal_error_audio">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-file-audio"></i>
+                                    </span>
+                                </div>
+                                <p class="help">Optional fun audio played sometimes when the user dials an invalid
+                                    number. </p>
+                            </div>
+                            <div class="field">
+                                <label class="label" for="scenario_end_call_audio">End Call Audio</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" id="scenario_end_call_audio" type="text"
+                                        x-model="end_call_audio">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-file-audio"></i>
+                                    </span>
+                                </div>
+                                <p class="help">Audio played when scenario ends.</p>
+                            </div>
+                        </div>
+                    </div>
+            </section>
+            <section class="section">
+                <div id="graph"></div>
+            </section>
+        </div>
+    </main>
+</body>
+
+<script>
+    function data() {
+        return {
+            name: "",
+            start_node: "",
+            invalid_number_audio: "",
+            invalid_number_fun_audio: "",
+            internal_error_audio: "",
+            end_call_audio: "",
+            nodes: [],
+
+            new_document() {
+                const user_selection = confirm("This will delete any data, proceed?");
+                if (!user_selection) {
+                    return
+                }
+                this.name = "";
+                this.start_node = "";
+                this.invalid_number_audio = "";
+                this.invalid_number_fun_audio = "";
+                this.internal_error_audio = "";
+                this.end_call_audio = "";
+                this.nodes = [];
+            },
+            open_document() {
+                const file_input = document.getElementById("file_input");
+                if (!("files" in file_input) || file_input.files.length == 0) {
+                    return
+                }
+                var reader = new FileReader();
+                reader.onload = (event) => {
+                    const data = JSON.parse(event.target.result);
+                    this.name = data.name;
+                    this.start_node = data.start_node;
+                    this.invalid_number_audio = data.invalid_number_audio;
+                    this.invalid_number_fun_audio = data.invalid_number_fun_audio;
+                    this.internal_error_audio = data.internal_error_audio;
+                    this.end_call_audio = data.end_call_audio;
+                }
+                const content = reader.readAsText(file_input.files[0]);
+            },
+            save_document() {
+                const data = {
+                    name: this.name,
+                    start_node: this.start_node,
+                    invalid_number_audio: this.invalid_number_audio,
+                    invalid_number_fun_audio: this.invalid_number_fun_audio,
+                    internal_error_audio: this.internal_error_audio,
+                    end_call_audio: this.end_call_audio,
+                    nodes: this.nodes,
+                };
+                const text = JSON.stringify(data);
+                var element = document.createElement("a");
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+                element.setAttribute('download', "scenario.json");
+                element.style.display = "none";
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+            }
+        }
+    }
+</script>
+
+</html>
