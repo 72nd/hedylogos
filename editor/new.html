@@ -11,9 +11,13 @@
     <link href="css/fontawesome.min.css" rel="stylesheet" />
     <script defer src="js/alpine.min.js"></script>
 
+    <link rel="shortcut icon" type="image/png" href="favicon.png">
+
     <script src="js/cytoscape.min.js"></script>
     <script src="js/lodash.min.js"></script>
     <script src="js/cytoscape-edgehandles.js"></script>
+    <script src="js/elk.bundled.js"></script>
+    <script src="js/cytoscape-elk.js"></script>
 </head>
 
 <body x-data="data()" x-init="init()">
@@ -62,106 +66,172 @@
     <main>
         <div class="container">
             <section class="section">
-                <h3 class="title">Scenario Settings</h2>
+                <h2 class="subtitle">Scenario Settings</h2>
+                <div class="columns is-desktop">
+                    <div class="column">
+                        <div class="field">
+                            <label class="label" for="scenario_name">Name</label>
+                            <div class="control has-icons-left">
+                                <input class="input" id="scenario_name" type="text" x-model="name">
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-pen"></i>
+                                </span>
+                            </div>
+                            <p class="help">The name of the scenario</p>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="scenario_start_node">Start Node</label>
+                            <div class="control has-icons-left">
+                                <input class="input is-family-monospace" id="scenario_start_node" type="text"
+                                    x-model="start_node">
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-star"></i>
+                                </span>
+                            </div>
+                            <p class="help">Id of the node the execution should start</p>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="scenario_invalid_audio">Invalid Number Audio</label>
+                            <div class="control has-icons-left">
+                                <input class="input" id="scenario_invalid_number_audio" type="text"
+                                    x-model="invalid_number_audio">
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-file-audio"></i>
+                                </span>
+                            </div>
+                            <p class="help">Audio played when the user dials an invalid number.</p>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="field">
+                            <label class="label" for="scenario_invalid_fun_audio">Invalid Number Audio Fun</label>
+                            <div class="control has-icons-left">
+                                <input class="input" id="scenario_invalid_fun_audio" type="text"
+                                    x-model="invalid_number_fun_audio">
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-file-audio"></i>
+                                </span>
+                            </div>
+                            <p class="help">Optional fun audio played some times when the user dials an invalid
+                                number.</p>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="scenario_internal_error_audio">Internal Error Audio</label>
+                            <div class="control has-icons-left">
+                                <input class="input" id="scenario_internal_error_audio" type="text"
+                                    x-model="internal_error_audio">
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-file-audio"></i>
+                                </span>
+                            </div>
+                            <p class="help">Optional fun audio played sometimes when the user dials an invalid
+                                number. </p>
+                        </div>
+                        <div class="field">
+                            <label class="label" for="scenario_end_call_audio">End Call Audio</label>
+                            <div class="control has-icons-left">
+                                <input class="input" id="scenario_end_call_audio" type="text" x-model="end_call_audio">
+                                <span class="icon is-small is-left">
+                                    <i class="fas fa-file-audio"></i>
+                                </span>
+                            </div>
+                            <p class="help">Audio played when scenario ends.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section">
+                <h2 class="subtitle">Nodes</h2>
+                <fieldset :disabled="!node_selected">
                     <div class="columns is-desktop">
                         <div class="column">
                             <div class="field">
-                                <label class="label" for="scenario_name">Name</label>
+                                <label class="label" for="node_id">ID</label>
                                 <div class="control has-icons-left">
-                                    <input class="input" id="scenario_name" type="text" x-model="name">
+                                    <input class="input is-family-monospace" id="node_id" type="text"
+                                        x-model="selected_node.id">
+                                    <span class="icon is-small is-left">
+                                        <i class="fas fa-key"></i>
+                                    </span>
+                                </div>
+                                <p class="help">The name of the node</p>
+                            </div>
+                            <div class="field">
+                                <label class="label" for="node_name">Name</label>
+                                <div class="control has-icons-left">
+                                    <input class="input" id="node_name" type="text" x-model="selected_node.name">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-pen"></i>
                                     </span>
                                 </div>
-                                <p class="help">The name of the scenario</p>
+                                <p class="help">The name of the node</p>
                             </div>
                             <div class="field">
-                                <label class="label" for="scenario_start_node">Start Node</label>
+                                <label class="label" for="node_audio">Audio</label>
                                 <div class="control has-icons-left">
-                                    <input class="input" id="scenario_start_node" type="text" x-model="start_node">
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-star"></i>
-                                    </span>
-                                </div>
-                                <p class="help">Id of the node the execution should start</p>
-                            </div>
-                            <div class="field">
-                                <label class="label" for="scenario_invalid_audio">Invalid Number Audio</label>
-                                <div class="control has-icons-left">
-                                    <input class="input" id="scenario_invalid_number_audio" type="text"
-                                        x-model="invalid_number_audio">
+                                    <input class="input" id="node_audio" type="text" x-model="selected_node.audio">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-file-audio"></i>
                                     </span>
                                 </div>
-                                <p class="help">Audio played when the user dials an invalid number.</p>
+                                <p class="help">Path to the audio file. Can be relative to the location of the scenario
+                                    file.
+                                </p>
                             </div>
                         </div>
                         <div class="column">
                             <div class="field">
-                                <label class="label" for="scenario_invalid_fun_audio">Invalid Number Audio Fun</label>
-                                <div class="control has-icons-left">
-                                    <input class="input" id="scenario_invalid_fun_audio" type="text"
-                                        x-model="invalid_number_fun_audio">
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-file-audio"></i>
-                                    </span>
+                                <label class="label" for="node_content">Content</label>
+                                <div class="control">
+                                    <textarea class="textarea" id="node_content"
+                                        x-model="selected_node.content"></textarea>
                                 </div>
-                                <p class="help">Optional fun audio played some times when the user dials an invalid
-                                    number.</p>
-                            </div>
-                            <div class="field">
-                                <label class="label" for="scenario_internal_error_audio">Internal Error Audio</label>
-                                <div class="control has-icons-left">
-                                    <input class="input" id="scenario_internal_error_audio" type="text"
-                                        x-model="internal_error_audio">
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-file-audio"></i>
-                                    </span>
-                                </div>
-                                <p class="help">Optional fun audio played sometimes when the user dials an invalid
-                                    number. </p>
-                            </div>
-                            <div class="field">
-                                <label class="label" for="scenario_end_call_audio">End Call Audio</label>
-                                <div class="control has-icons-left">
-                                    <input class="input" id="scenario_end_call_audio" type="text"
-                                        x-model="end_call_audio">
-                                    <span class="icon is-small is-left">
-                                        <i class="fas fa-file-audio"></i>
-                                    </span>
-                                </div>
-                                <p class="help">Audio played when scenario ends.</p>
+                                <p class="help">Optional the textual content of the audio in the node.</p>
                             </div>
                         </div>
                     </div>
-            </section>
-            <section class="section">
+                </fieldset>
                 <div class="box">
                     <div class="field has-addons">
                         <p class="control">
                             <button class="button" @click="fit_all()">
                                 <span class="icon is-small">
-                                    <i class="fas fa-compress"></i>
+                                    <i class="fa fa-compress"></i>
                                 </span>
-                                <span>Fit all</span>
+                                <span>Fit</span>
                             </button>
                             </button>
                         </p>
                         <p class="control">
-                            <button class="button">
+                            <button class="button" @click="apply_layout()">
                                 <span class="icon is-small">
-                                    <i class="fas fa-align-center"></i>
+                                    <i class="fas fa-diagram-project"></i>
                                 </span>
-                                <span>Center</span>
+                                <span>Align</span>
                             </button>
                         </p>
                         <p class="control">
-                            <button class="button">
+                            <button class="button" @click="apply_layout()">
                                 <span class="icon is-small">
-                                    <i class="fas fa-align-right"></i>
+                                    <i class="fas fa-plus"></i>
                                 </span>
-                                <span>Right</span>
+                                <span>Add</span>
+                            </button>
+                        </p>
+                        <p class="control">
+                            <button class="button" @click="apply_layout()">
+                                <span class="icon is-small">
+                                    <i class="fas fa-plug"></i>
+                                </span>
+                                <span>Link</span>
+                            </button>
+                        </p>
+                        <p class="control">
+                            <button class="button" @click="apply_layout()">
+                                <span class="icon is-small">
+                                    <i class="fas fa-trash"></i>
+                                </span>
+                                <span>Delete</span>
                             </button>
                         </p>
                     </div>
@@ -186,10 +256,43 @@
             node_content: "",
             node_audio: "",
             nodes: [],
+            node_selected: false,
+            selected_node: {
+                id: null,
+                name: null,
+                audio: null,
+                content: null,
+            },
+            empty_node: {
+                id: null,
+                name: null,
+                audio: null,
+                content: null,
+            },
 
             init() {
                 this.cy = window.cy = cytoscape({
                     container: document.getElementById("graph"),
+                    style: [
+                        {
+                            selector: "node[id]",
+                            style: {
+                                "content": "data(id)"
+                            }
+                        },
+                        {
+                            selector: "edge[number]",
+                            style: {
+                                "curve-style": "bezier",
+                                "target-arrow-shape": "triangle",
+                                "content": "data(number)",
+                            }
+                        }
+                    ]
+                });
+                this.cy.on("click", "node", (event) => {
+                    this.selected_node = this.node_by_id(event.target.id());
+                    this.node_selected = true;
                 });
             },
             new_document() {
@@ -197,7 +300,7 @@
                 if (!user_selection) {
                     return
                 }
-                this.cy.removeData();
+                this.init();
                 this.name = "";
                 this.start_node = "";
                 this.invalid_number_audio = "";
@@ -252,6 +355,17 @@
             fit_all() {
                 this.cy.fit();
             },
+            apply_layout() {
+                var options = {
+                    name: "elk",
+                    nodeDimensionsIncludeLabels: true,
+                    elk: {
+                        "algorithm": "layered",
+                        "elk.direction": "DOWN",
+                    }
+                };
+                this.cy.layout(options).run();
+            },
             initialize_edges() {
                 for (i in this.nodes) {
                     const node = this.nodes[i];
@@ -263,8 +377,7 @@
                         const source_id = node.id;
                         const target_id = this.node_by_id(link.target).id;
                         const id = `${source_id}_${target_id}_${link.number}`;
-                        this.add_edge_to_graph(id, source_id, target_id); 
-                        console.log(id);
+                        this.add_edge_to_graph(id, source_id, target_id, link.number);
                     }
                 }
             },
@@ -282,13 +395,17 @@
                     data: node,
                 });
             },
-            add_edge_to_graph(id, source_id, target_id) {
+            add_edge_to_graph(id, source_id, target_id, number) {
+                if (number === null) {
+                    number = -1;
+                }
                 this.cy.add({
                     group: "edges",
                     data: {
                         id: id,
                         source: source_id,
-                        target: target_id
+                        target: target_id,
+                        number: number,
                     }
                 })
             }
