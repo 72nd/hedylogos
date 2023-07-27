@@ -99,7 +99,7 @@
                                     <i class="fas fa-file-audio"></i>
                                 </span>
                             </div>
-                            <p class="help">Audio played when the user dials an invalid number.</p>
+                            <p class="help">Audio played when the user dials an invalid number</p>
                         </div>
                     </div>
                     <div class="column">
@@ -113,7 +113,7 @@
                                 </span>
                             </div>
                             <p class="help">Optional fun audio played some times when the user dials an invalid
-                                number.</p>
+                                number</p>
                         </div>
                         <div class="field">
                             <label class="label" for="scenario_internal_error_audio">Internal Error Audio</label>
@@ -125,7 +125,7 @@
                                 </span>
                             </div>
                             <p class="help">Optional fun audio played sometimes when the user dials an invalid
-                                number. </p>
+                                number </p>
                         </div>
                         <div class="field">
                             <label class="label" for="scenario_end_call_audio">End Call Audio</label>
@@ -135,7 +135,7 @@
                                     <i class="fas fa-file-audio"></i>
                                 </span>
                             </div>
-                            <p class="help">Audio played when scenario ends.</p>
+                            <p class="help">Audio played when scenario ends</p>
                         </div>
                     </div>
                 </div>
@@ -154,7 +154,7 @@
                                         <i class="fas fa-key"></i>
                                     </span>
                                 </div>
-                                <p class="help">The name of the node</p>
+                                <p class="help">Unique ID of the node</p>
                             </div>
                             <div class="field">
                                 <label class="label" for="node_name">Name</label>
@@ -219,7 +219,7 @@
                             </button>
                         </p>
                         <p class="control">
-                            <button class="button" @click="apply_layout()">
+                            <button class="button" @click="link_node()" :disabled="!node_selected">
                                 <span class="icon is-small">
                                     <i class="fas fa-plug"></i>
                                 </span>
@@ -227,7 +227,7 @@
                             </button>
                         </p>
                         <p class="control">
-                            <button class="button" @click="apply_layout()">
+                            <button class="button" @click="delete_element()" :disabled="!node_selected">
                                 <span class="icon is-small">
                                     <i class="fas fa-trash"></i>
                                 </span>
@@ -293,6 +293,17 @@
                 this.cy.on("click", "node", (event) => {
                     this.selected_node = this.node_by_id(event.target.id());
                     this.node_selected = true;
+                    console.log(this.selected_node.links);
+                });
+                this.cy.on("ehcomplete", (event, source, target, edge) => {
+                    node = this.node_by_id(source.id());
+                    if (node.links === null) {
+                        node.links = [];
+                    }
+                    node.links.push({
+                        target: target.id(),
+                        number: null,
+                    });
                 });
             },
             new_document() {
@@ -366,6 +377,17 @@
                 };
                 this.cy.layout(options).run();
             },
+            link_node() {
+                eh = cy.edgehandles();
+                eh.start(this.cy.$("node:selected")); 
+                console.log(this.cy.$("node:selected"));
+            },
+            delete_element() {
+                this.cy.remove(this.cy.$("node:selected"));
+                this.delete_node_by_id(this.selected_node.id);
+                this.selected_node = this.empty_node;
+                this.node_selected = false;
+            },
             initialize_edges() {
                 for (i in this.nodes) {
                     const node = this.nodes[i];
@@ -389,6 +411,13 @@
                 }
                 return null
             },
+            delete_node_by_id(id) {
+                for (i in this.nodes) {
+                    if (this.nodes[i].id === id) {
+                        this.nodes.splice(i, 1);
+                    }
+                }
+            },
             add_node_to_graph(node) {
                 this.cy.add({
                     group: "nodes",
@@ -397,7 +426,7 @@
             },
             add_edge_to_graph(id, source_id, target_id, number) {
                 if (number === null) {
-                    number = -1;
+                    number = "";
                 }
                 this.cy.add({
                     group: "edges",
