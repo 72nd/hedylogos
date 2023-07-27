@@ -7,12 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="css/bulma.min.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
     <link href="css/fontawesome.min.css" rel="stylesheet" />
     <script defer src="js/alpine.min.js"></script>
-    <script src="js/jsplumb.browser-ui.umd.js"></script>
+
+    <script src="js/cytoscape.min.js"></script>
+    <script src="js/lodash.min.js"></script>
+    <script src="js/cytoscape-edgehandles.js"></script>
 </head>
 
-<body x-data="data()">
+<body x-data="data()" x-init="init()">
     <nav class="navbar is-primary">
         <div class="navbar-brand">
             <a class="navbar-item" href="#">
@@ -133,7 +137,37 @@
                     </div>
             </section>
             <section class="section">
-                <div id="graph"></div>
+                <div class="box">
+                    <div class="field has-addons">
+                        <p class="control">
+                            <button class="button" @click="fit_all()">
+                                <span class="icon is-small">
+                                    <i class="fas fa-compress"></i>
+                                </span>
+                                <span>Fit all</span>
+                            </button>
+                            </button>
+                        </p>
+                        <p class="control">
+                            <button class="button">
+                                <span class="icon is-small">
+                                    <i class="fas fa-align-center"></i>
+                                </span>
+                                <span>Center</span>
+                            </button>
+                        </p>
+                        <p class="control">
+                            <button class="button">
+                                <span class="icon is-small">
+                                    <i class="fas fa-align-right"></i>
+                                </span>
+                                <span>Right</span>
+                            </button>
+                        </p>
+                    </div>
+                    <div class="graph" id="graph">
+                    </div>
+                </div>
             </section>
         </div>
     </main>
@@ -148,13 +182,22 @@
             invalid_number_fun_audio: "",
             internal_error_audio: "",
             end_call_audio: "",
+            node_name: "",
+            node_content: "",
+            node_audio: "",
             nodes: [],
 
+            init() {
+                this.cy = window.cy = cytoscape({
+                    container: document.getElementById("graph"),
+                });
+            },
             new_document() {
                 const user_selection = confirm("This will delete any data, proceed?");
                 if (!user_selection) {
                     return
                 }
+                this.cy.removeData();
                 this.name = "";
                 this.start_node = "";
                 this.invalid_number_audio = "";
@@ -168,6 +211,7 @@
                 if (!("files" in file_input) || file_input.files.length == 0) {
                     return
                 }
+                this.cy.removeData();
                 var reader = new FileReader();
                 reader.onload = (event) => {
                     const data = JSON.parse(event.target.result);
@@ -177,6 +221,12 @@
                     this.invalid_number_fun_audio = data.invalid_number_fun_audio;
                     this.internal_error_audio = data.internal_error_audio;
                     this.end_call_audio = data.end_call_audio;
+                    for (i in data.nodes) {
+                        const node = data.nodes[i];
+                        this.add_node_to_graph(node);
+                        this.nodes.push(node);
+                    }
+                    this.initialize_edges();
                 }
                 const content = reader.readAsText(file_input.files[0]);
             },
@@ -198,6 +248,49 @@
                 document.body.appendChild(element);
                 element.click();
                 document.body.removeChild(element);
+            },
+            fit_all() {
+                this.cy.fit();
+            },
+            initialize_edges() {
+                for (i in this.nodes) {
+                    const node = this.nodes[i];
+                    if (node.links == null) {
+                        continue;
+                    }
+                    for (j in node.links) {
+                        const link = node.links[j];
+                        const source_id = node.id;
+                        const target_id = this.node_by_id(link.target).id;
+                        const id = `${source_id}_${target_id}_${link.number}`;
+                        this.add_edge_to_graph(id, source_id, target_id); 
+                        console.log(id);
+                    }
+                }
+            },
+            node_by_id(id) {
+                for (i in this.nodes) {
+                    if (this.nodes[i].id === id) {
+                        return this.nodes[i]
+                    }
+                }
+                return null
+            },
+            add_node_to_graph(node) {
+                this.cy.add({
+                    group: "nodes",
+                    data: node,
+                });
+            },
+            add_edge_to_graph(id, source_id, target_id) {
+                this.cy.add({
+                    group: "edges",
+                    data: {
+                        id: id,
+                        source: source_id,
+                        target: target_id
+                    }
+                })
             }
         }
     }
