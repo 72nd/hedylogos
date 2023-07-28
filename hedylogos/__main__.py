@@ -3,8 +3,6 @@ from .model import Scenario
 from .receiver import KeyboardReceiver
 
 from pathlib import Path
-if Path("/etc/rpi-issue").exists():
-    from .receiver import DialPhoneReceiver
 
 from typing_extensions import Annotated
 
@@ -58,8 +56,12 @@ def run_phone(
     """
     scenario = Scenario.from_json(path)
     controller = Controller(scenario, path)
-    receiver = DialPhoneReceiver(controller)
-    receiver.run()
+    if Path("/etc/rpi-issue").exists():
+        from .receiver import DialPhoneReceiver
+        receiver = DialPhoneReceiver(controller)
+        receiver.run()
+    else:
+        raise NotImplementedError("Reading input from a rotary phone is only implemented for Raspberry Pi's (where the rp.GPIO library is available)")
 
 
 @app.command()
