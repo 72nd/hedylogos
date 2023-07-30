@@ -148,11 +148,12 @@
                             <div class="field">
                                 <label class="label" for="node_id">ID</label>
                                 <div class="control has-icons-left">
-                                    <input class="input is-family-monospace" id="node_id" type="text"
-                                        x-model="selected_node.id">
+                                    <input :class="['input', 'is-family-monospace', validate_id() ? 'is-danger' : '']" id="node_id" type="text"
+                                        x-model="selected_node.id" @onChange="validate_id()">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-key"></i>
                                     </span>
+                                    <p class="help is-danger" x-show="validate_id()">ID has to be unique</p>
                                 </div>
                                 <p class="help">Unique ID of the node</p>
                             </div>
@@ -305,6 +306,10 @@
                         number: null,
                     });
                 });
+                this.cy.on("unselect", (event) => {
+                    this.selected_node = this.empty_node;
+                    this.node_selected = false;
+                });
             },
             new_document() {
                 const user_selection = confirm("This will delete any data, proceed?");
@@ -362,6 +367,12 @@
                 document.body.appendChild(element);
                 element.click();
                 document.body.removeChild(element);
+            },
+            validate_id() {
+                console.log("xxxxxxx");
+                console.log(this.selected_node.id);
+                count = _.countBy(this.nodes, {"id": this.selected_node.id});
+                return count.true > 1
             },
             fit_all() {
                 this.cy.fit();
