@@ -296,6 +296,15 @@
                     this.node_selected = true;
                     console.log(this.selected_node.links);
                 });
+                this.cy.on("click", "edge", (event) => {
+                    edge = this.cy.$(`[id = "${event.target.id()}"]`);
+                    input = prompt("0-9, empty for random", edge.data("number"));
+                    if ((isNaN(parseInt(input)) && input != "") || input < 0 || input > 9) {
+                        alert("Invalid number");
+                        return
+                    }
+                    this.update_edge_number(edge, parseInt(input));
+                });
                 this.cy.on("ehcomplete", (event, source, target, edge) => {
                     node = this.node_by_id(source.id());
                     if (node.links === null) {
@@ -448,6 +457,9 @@
                         number: number,
                     }
                 })
+            },
+            update_edge_number(edge, number) {
+                console.log(edge.data("source") + " " + number);
             }
         }
     }
