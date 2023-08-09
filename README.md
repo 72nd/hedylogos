@@ -5,100 +5,95 @@
     hedylogos
   </h1>
   <h2>Build interactive audio scenarios using old dial phones or numeric keyboards</h2>
-  <!-- <p><a href="README-de.md">Deutsche Version</a></p> -->
+  <p><a href="README-de.md">Deutsche Version</a></p>
 </div>
 
-_The English Version of this README should be available in August._
+With Hedylogos it is possible to develop interactive audio formats. The navigation between the individual audio snippets is done by entering/dialling numbers, as is also known from telephone hotline menus. The software supports two different input modes for users: On the one hand, old dial telephones can be used for this purpose or the software can be controlled with the help of a [numeric keypad](https://de.wikipedia.org/wiki/Ziffernblock). The creation of the audio scenarios is relatively simple and can be done in a graphical editor as well as via text editor (more on this below). Many different scenarios are conceivable, both in terms of content and use, such as interactive stories or as a player in a museum, which plays different information depending on the button pressed.
 
-Mit Hedylogos ist es möglich, interaktive Audioformate zu entwickeln. Die Navigatio zwischen den einzelnen Audiosschnipsel erfolgt über die Eingabe/das Wählen von Nummern, wie das etwa auch bei Menüs von Telefonhotlines bekannt ist. Die Software unterstützt hierfür zwei unterschiedliche Modi für die Nutzenden: Zum einen kann altes Wählscheibentelefon (nach einem kleinen Umbau) dafür verwendet werden oder die Software kann mithilfe eines [Ziffernblocks](https://de.wikipedia.org/wiki/Ziffernblock) gesteuert werden. Die Erstellung der Audioszenarios ist verhältnismäßig einfach und kann sowohl in einem grafischen Editor als auch per Texteditor erfolgen (mehr dazu unten). Es sind sowohl inhaltlich als auch von der Nutzung her viele unterschiedliche Szenarien denkbar, wie interaktive Geschichten oder als Player in einem Museum, welcher je nach Knopfdruck unterschiedliche Informationen abspielt.
-
-
-## Förderung
+## Funding
 
 <img alt="Logo des Ministeriums für Wissenschaft Forschung und Kultur des Landes Brandenburg" src="misc/mwfk.png" width="200" style="align:left"/>
 
-Das Projekt wurde gefördert mit Mitteln des Ministeriums für Wissenschaft, Forschung und Kultur des Landes Brandenburg.
+The project was funded by the Ministry of Science, Research and Culture of the State of Brandenburg.
 
 
-## Anforderungen
+## Requirements
 
-Da Hedylogos in Python geschrieben ist, läuft die Software auf fast jedem Computer. Bitte beachte, dass für die Verwendung eines Wählscheibentelefons ein [Raspberry Pi](https://en.wikipedia.org/wiki/Raspberry_Pi) notwendig ist, da ein normaler Laptop oder Computer nicht über die notwendigen Schnittstellen verfügt. Wenn du den Aufwand scheust, kannst du aber mit dem Ziffernblock-Modus auch einfach einen herkömmlichen Computer verwenden, an welchen ein dezidierten Ziffernblock (wie er etwa hier bei [Galaxus](https://www.galaxus.de/de/s1/product/logilink-id0120-nummernblock-kabellos-tastatur-12817754) zu kaufen ist) und ein Kopfhörer gehängt wird.
+Since Hedylogos is written in Python, the software runs on almost any computer. Please note that a [Raspberry Pi](https://en.wikipedia.org/wiki/Raspberry_Pi) is required to use a dial phone, as a normal laptop or computer does not have the necessary interfaces. If you don't want to go to the trouble, you can also use the dial pad mode on a conventional computer with a dedicated dial pad (like the one you can buy here at [Galaxus](https://www.galaxus.de/de/s1/product/logilink-id0120-nummernblock-kabellos-tastatur-12817754)) and a headset.
 
-Die Installation von Python ist abhängig vom verwendeten Betriebssystem lässt sich aber mit [dieser Anleitung](https://python.land/installing-python) einfach bewerkstelligen. Da Python weit verbreitet sind, sollten sich etwaige Probleme durch das Verwenden einer Suchmaschine einfach lösen lassen.
+The installation of Python depends on the operating system used, but can be easily done with [this manual](https://python.land/installing-python). Since Python is widely used, any problems should be easily solved by using a search engine.
 
-Weiter solltest du etwas mit der Bedienung der Kommandozeile vertraut sein. Eine Einführung findest du etwa hier für [Windows](https://www.makeuseof.com/tag/a-beginners-guide-to-the-windows-command-line/) und hier für [MacOS](https://www.makeuseof.com/tag/beginners-guide-mac-terminal/).
+You should also be somewhat familiar with the command line. You can find an introduction here for [Windows](https://www.makeuseof.com/tag/a-beginners-guide-to-the-windows-command-line/) and here for [MacOS](https://www.makeuseof.com/tag/beginners-guide-mac-terminal/).
 
 
 ## Installation
 
-Lade dir zunächst die [neuste Version](https://github.com/72nd/hedylogos/releases/latest) runter. Entpacke das Archiv und navigiere im Terminal in den Ordner.
+First download the [latest version](https://github.com/72nd/hedylogos/releases/latest). Unpack the archive and navigate to the folder in the terminal.
 
 ```
 python -m venv .venv
 pip install .
 ```
 
-Danach kann Hedylogos mit dem Befehl `hedylogos` gestartet werden.
+Afterwards, Hedylogos can be started with the command `hedylogos`.
 
 
-## Beispiel
+## Example
 
-Im Ordner `example` findet sich ein Beispielszenario, welches die wichtigsten Funktionen und Eigenschaften von Hedylogos abdeckt. Um das Beispiel zu starten, kann folgender Befehl verwendet werden.
+In the folder `example` there is an example scenario which covers the most important functions and features of Hedylogos. To start the example, the following command can be used.
 
 ```
 hedylogos run-keyboard example/scenario.json
 ```
 
 
-## Ein Szenario erstellen
+## Create a scenario
 
-Es gibt zwei Möglichkeiten, ein Szenario für Hedylogos zu erstellen. Zum einen gibt es einen grafischen Editor, zum anderen können fortgeschrittene Nutzer auch die JSON Datei direkt bearbeiten. In Folge werden beide Wege erläutert.
-
-
-### Mit dem Editor
-
-Um das Erstellen der Szenarios möglichst einfach zu gestalten, existiert ein [grafischer Editor](https://72nd.github.io/hedylogos/editor/). Mehr zur Bedienung findest du im Editor selbst. Lade am Ende das Szenario als Datei runter und speichere es auf deinem Computer.
+There are two ways to create a scenario for Hedylogos. On the one hand, there is a graphical editor, on the other hand, advanced users can also edit the JSON file directly. In the following, both ways will be explained.
 
 
-### Manuell in der JSON Datei
+### With the editor
 
-Wenn dir JSON nicht fremd ist, kannst du das Szenario auch direkt im Editor erstellen. Die Bedeutung der einzelnen Fälle sollten soweit selbsterklärend sein. Sonst lohnt sich ein Blick in den [grafischen Editor](https://72nd.github.io/hedylogos/editor/) und die darin befindlichen Erläuterungen der Felder zu werfen. Die Software bietet auch die Möglichkeit, ein Template der Datei zu generieren.
+To make the creation of the scenarios as easy as possible, there is a [graphical editor](https://72nd.github.io/hedylogos/editor/). You can find out more about how to use it in the editor itself. At the end, download the scenario as a file and save it on your computer.
+
+
+### Manually using a JSON file
+
+If you are familiar with JSON, you can also create the scenario directly in the editor. The meaning of the individual cases should be self-explanatory. Otherwise, it is worth taking a look at the [graphical editor](https://72nd.github.io/hedylogos/editor/) and the explanations of the fields contained therein. The software also offers the possibility to generate a template of the file.
 
 ```
 hedylogos init scenario.json
 ```
 
+## Validate the scenario file
 
-## Die Szenariodatei validieren
-
-Bei der Erstellung größerer Szenarios schleichen sich schnell kleine Fehler und Verschreiber ein. Damit diese nicht erst bei der Benutzung auffallen, sind in Hedylogos Validierungsroutinen eingebaut, welche beim Laden einer Szenariodatei automatisiert die allermeisten Probleme erkennen. Nur die Prüfung, ob alle Audiodateien vorhanden sind, muss manuell mit einem Befehl ausgelöst werden.
-
-```
-hedylogos check pfad/zum/szenario.json
-```
-
-## Das Szenario abspielen
-
-Hedylogos bietet zwei unterschiedliche Modi an. Zum einen mit einem alten Wählscheibentelefon oder mit einer Tastatur bzw. [Ziffernblocks](https://de.wikipedia.org/wiki/Ziffernblock).
-
-
-### Mit der Tastatur / Ziffernblock
-
-Die Ausführung wird mit diesem Befehl gestartet.
+When creating larger scenarios, small errors and mistakes can easily creep in. So that these do not only become apparent during use, validation routines are built into Hedylogos, which automatically detect the vast majority of problems when loading a scenario file. Only the check whether all audio files are present must be triggered manually with a command.
 
 ```
-hedylogos run-keyboard pfad/zum/szenario.json
+hedylogos check path/to/scenario.json
 ```
 
-Die Ausführung kann mit folgenden Tasten gesteuert werden:
+## Play the scenario
 
-- `p` oder `<ENTER>`: Startet das Szenario. Wenn das Szenario bereits wiedergegeben wird, wird die Wiedergabe abgebrochen und startet wieder am Startpunkt.
-- `h`: Stopt die Wiedergabe des Szenarios. Simuliert in erster Linie den Moment, wenn der Telefonhörer aufgelegt wird und hat deshalb für den Tastaturmodus keine wirkliche Bedeutung.
-- `q`: Beendet die Ausführung des Programms. Damit Besucher diese Aktion nicht auslösen können, empfiehlt sich die verwendung eines dezidierten Nummernblocks.
-- `0-9`: Wählen einer Nummern.
+Hedylogos offers two different modes. One is with an old dial phone or with a keyboard or [numeric keypad](https://de.wikipedia.org/wiki/Ziffernblock).
 
 
-### Mit einem Wählscheibentelefon
+### With the keyboard / numeric keypad
 
-TODO.
+The execution is started with this command.
 
+```
+hedylogos run-keyboard path/to/scenario.json
+```
+
+The execution can be controlled with the following keys:
+
+- `p` or `<ENTER>`: Starts the scenario. If the scenario is already being played back, the playback is interrupted and starts again at the starting point.
+- `h`: Stops the playback of the scenario. Primarily simulates the moment when the telephone receiver is hung up and therefore has no real meaning for the keyboard mode.
+- `q`: Stops the execution of the programme. To prevent visitors from triggering this action, it is recommended to use a dedicated numeric keypad.
+- `0-9`: Dial a number.
+
+
+### Using a dial telephone
+
+To use the input of a dial phone, the library [RotaryPi](https://pypi.org/project/rotarypi/) is used. The prerequisite for this is the use of a [Raspberry Pi](https://www.raspberrypi.org/). More about the pin assignment can be found in the [RotaryPi documentation](https://rotarypi.readthedocs.io/en/latest/).

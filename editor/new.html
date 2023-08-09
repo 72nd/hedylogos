@@ -149,7 +149,7 @@
                                 <label class="label" for="node_id">ID</label>
                                 <div class="control has-icons-left">
                                     <input :class="['input', 'is-family-monospace', validate_id() ? 'is-danger' : '']" id="node_id" type="text"
-                                        x-model="selected_node.id" @onChange="validate_id()">
+                                        x-model="selected_node.id" @onchange="validate_id()" @focusout="update_id()">
                                     <span class="icon is-small is-left">
                                         <i class="fas fa-key"></i>
                                     </span>
@@ -294,7 +294,6 @@
                 this.cy.on("click", "node", (event) => {
                     this.selected_node = this.node_by_id(event.target.id());
                     this.node_selected = true;
-                    console.log(this.selected_node.links);
                 });
                 this.cy.on("click", "edge", (event) => {
                     edge = this.cy.$(`[id = "${event.target.id()}"]`);
@@ -378,8 +377,6 @@
                 document.body.removeChild(element);
             },
             validate_id() {
-                console.log("xxxxxxx");
-                console.log(this.selected_node.id);
                 count = _.countBy(this.nodes, {"id": this.selected_node.id});
                 return count.true > 1
             },
@@ -458,8 +455,26 @@
                     }
                 })
             },
+            update_id() {
+                var incomers = this.cy.$(`[id = "${this.selected_node.id}"]`).incomers();
+                for (i in incomers) {
+                    link = _.find(incomers[i].links, {"target": this.selected_node.id })
+                    for (j in incomers[i].links) {
+
+                    }
+                }
+            },
             update_edge_number(edge, number) {
-                console.log(edge.data("source") + " " + number);
+                node = _.find(this.nodes, {"id": edge.data("source")})
+                link = _.find(node.links, {"target": edge.data("target")});
+                if (number === "") {
+                    link.number = null;
+                } else {
+                    link.number = parseInt(number);
+                }
+                this.cy.$(`[id = "${edge.id()}"]`).css({
+                    content: ""+link.number,
+                });
             }
         }
     }
