@@ -258,6 +258,7 @@
             node_audio: "",
             nodes: [],
             node_selected: false,
+            id_on_selection: "",
             selected_node: {
                 id: null,
                 name: null,
@@ -293,11 +294,15 @@
                 });
                 this.cy.on("click", "node", (event) => {
                     this.selected_node = this.node_by_id(event.target.id());
+                    this.id_on_selection = this.selected_node.id;
                     this.node_selected = true;
                 });
                 this.cy.on("click", "edge", (event) => {
                     edge = this.cy.$(`[id = "${event.target.id()}"]`);
                     input = prompt("0-9, empty for random", edge.data("number"));
+                    if (input === null) {
+                        return
+                    }
                     if ((isNaN(parseInt(input)) && input != "") || input < 0 || input > 9) {
                         alert("Invalid number");
                         return
@@ -457,10 +462,12 @@
             },
             update_id() {
                 var incomers = this.cy.$(`[id = "${this.selected_node.id}"]`).incomers();
+                console.log(this.selected_node.id);
+                console.log(this.id_on_selection);
                 for (i in incomers) {
                     link = _.find(incomers[i].links, {"target": this.selected_node.id })
                     for (j in incomers[i].links) {
-
+                        console.log(incomers[i].links[j]);
                     }
                 }
             },
