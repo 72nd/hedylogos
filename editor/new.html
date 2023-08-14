@@ -359,6 +359,7 @@
                         this.nodes.push(node);
                     }
                     this.initialize_edges();
+                    this.apply_layout();
                 }
                 const content = reader.readAsText(file_input.files[0]);
             },
@@ -461,17 +462,14 @@
                 })
             },
             update_id() {
-                var incomers = this.cy.$(`[id = "${this.selected_node.id}"]`).incomers();
-                console.log(this.selected_node.id);
-                console.log(this.id_on_selection);
-                for (i in incomers) {
-                    link = _.find(incomers[i].links, {"target": this.selected_node.id })
-                    for (j in incomers[i].links) {
-                        console.log(incomers[i].links[j]);
-                    }
+                var node = this.cy.$(`[id = "${this.selected_node.id}"]`);
+                var incomers = node.incomers().edges();
+                for (i = 0; i < incomers.size(); i++) {
+                    incomers[i].data("target", this.selected_node);
                 }
             },
             update_edge_number(edge, number) {
+                // TODO: Probably update the edge id itself.
                 node = _.find(this.nodes, {"id": edge.data("source")})
                 link = _.find(node.links, {"target": edge.data("target")});
                 if (number === "") {
